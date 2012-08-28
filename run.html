@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JS Playground</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css" media="screen">
+      
+      #ace_container {
+        position: absolute;
+        left:20px;
+      }
+
+      #editor {
+        width: 600px;
+        height: 300px;
+        margin: 0;
+        padding: 0;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <h1>JS Playground</h1>
+
+    <div id="ace_container" class="container">
+      <pre id="editor"></pre>
+
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.getSession().setMode("ace/mode/javascript");
+        editor.setValue("function foo(items) {\n"+
+        "  var i;\n"+
+        "  for (i = 0; i < items.length; i++) {\n"+
+        "      alert('Ace Rocks ' + items[i]);\n"+
+        "  }\n"+
+        "}\n");
+    </script>
+  </body>
+</html>
