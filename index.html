@@ -3,7 +3,6 @@
 <html>
   <head>
     <title>JS Playground</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css" media="screen">
       
       #ace_container {
@@ -22,7 +21,6 @@
         right: 0;
       }
 
-
     </style>
   </head>
   <body>
@@ -30,20 +28,10 @@
 
     <div id="ace_container" class="container">
       <pre id="editor"></pre>
-
     </div>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script>
-        var editor = ace.edit("editor");
-        editor.getSession().setMode("ace/mode/javascript");
-        editor.setValue("function foo(items) {\n"+
-        "  var i;\n"+
-        "  for (i = 0; i < items.length; i++) {\n"+
-        "      alert('Ace Rocks ' + items[i]);\n"+
-        "  }\n"+
-        "}\n");
-    </script>
+    <script src="http://localframework:8888/framework/js/lib/require.js" 
+      data-main="http://localframework:8888/framework/js/framework" > </script>
+
   </body>
 </html>
