@@ -20,7 +20,7 @@ define [
 
     context = (() ->
       @log = (s) -> console.log s
-      @print = (s) -> $("#output").empty().append  s + "\n";
+      @print = (s) -> $("#output").append  s + "\n";
     )();
 
     resize = -> 
@@ -28,7 +28,9 @@ define [
       $('#controls').height controlHeight
 
     runCode = ->
-      eval.apply(context, [editor.getValue()])
+      $("#output").empty()
+      code = editor.getValue()
+      eval.apply(context, [code])
 
     $(document).ready ->
       $('#run').click runCode
