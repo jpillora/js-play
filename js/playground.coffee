@@ -12,18 +12,23 @@ define [
 
     editor = ace.edit("editor")
     editor.getSession().setMode("ace/mode/javascript");
-    editor.setValue("alert(42);");
+    editor.setValue("print(42);");
 
     controlHeight = 50
 
     $window = $(window)
+
+    context = (() ->
+      @log = (s) -> console.log s
+      @print = (s) -> $("#output").append  s + "\n";
+    )();
 
     resize = -> 
       $('#editor,#results').height $window.height() - controlHeight
       $('#controls').height controlHeight
 
     runCode = ->
-      eval(editor.getValue())
+      eval.apply(context, [editor.getValue()])
 
     $(document).ready ->
       $('#run').click runCode
