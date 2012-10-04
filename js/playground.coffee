@@ -2,12 +2,11 @@
 define [
   'util/log'
   'ext/ace'
-  'css!framework/css/bootstrap-combined.min'
   'less!../stylesheets/playground'
   'underscore'
   'lib/prettify'
-  'lib/bootstrap.min'],
-  (log, aceLoader) ->  
+  'bootstrap'],
+  (log, aceExt) ->
 
     log 'running playground coffee'
 
@@ -23,6 +22,11 @@ define [
       $('#editor,#results').height $window.height() - controlHeight
       $('#controls').height controlHeight
 
+    runCode = ->
+      eval(editor.getValue())
+
+    $(document).ready ->
+      $('#run').click runCode
 
     $(window).resize resize
     resize()
