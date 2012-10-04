@@ -13,9 +13,16 @@ define [
 
     editor = ace.edit("editor")
     editor.getSession().setMode("ace/mode/javascript");
-    editor.setValue("function foo(items) {\n"+
-    "  var i;\n"+
-    "  for (i = 0; i < items.length; i++) {\n"+
-    "      alert('Ace Rocks ' + items[i]);\n"+
-    "  }\n"+
-    "}\n");
+    editor.setValue("alert(42);");
+
+    controlHeight = 50
+
+    $window = $(window)
+
+    resize = -> 
+      $('#editor,#results').height $window.height() - controlHeight
+      $('#controls').height controlHeight
+
+
+    $(window).resize resize
+    resize()

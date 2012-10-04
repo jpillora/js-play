@@ -3,35 +3,23 @@
 <html>
   <head>
     <title>JS Playground</title>
-    <style type="text/css" media="screen">
-      
-      #ace_container {
-        position: absolute;
-        left:20px;
-      }
-
-      #editor {
-        width: 600px;
-        height: 300px;
-        margin: 0;
-        padding: 0;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-      }
-
-    </style>
   </head>
   <body>
-    <h1>JS Playground</h1>
-
-    <div id="ace_container" class="container">
+    <div id="ace" class="container">
       <pre id="editor"></pre>
     </div>
 
-    <script src="http://localframework:8888/framework/js/lib/require.js" 
-      data-main="http://localframework:8888/framework/js/framework" > </script>
+    <div id="results" class="container">
+      results
+    </div>
+
+
+    <div id="controls" class="container">
+      controls
+    </div>
+
+    <script src="http://127.0.0.1:8888/framework/js/lib/require.js" 
+      data-main="http://127.0.0.1:8888/framework/js/framework" > </script>
 
   </body>
 </html>

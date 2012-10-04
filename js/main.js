@@ -1,3 +1,1 @@
-define(["cs!playground"], function() {
-
-});
+define(["cs!playground"], function() {});
