@@ -20,7 +20,7 @@ define [
 
     context = (() ->
       @log = (s) -> console.log s
-      @print = (s) -> $("#output").append  s + "\n";
+      @print = (s) -> $("#output").empty().append  s + "\n";
     )();
 
     resize = -> 
