@@ -5,7 +5,7 @@
     <title>JS Playground</title>
   </head>
   <body>
-    <div id="ace" class="container">
+    <div id="editor_container" class="container">
 
       <div class="padder">
         <pre id="editor"></pre>
@@ -27,8 +27,23 @@
       </div>
     </div>
 
-    <script src="http://framework.jpillora.com/js/lib/require.js" 
-      data-main="http://framework.jpillora.com/js/framework" > </script>
+    <script type="text/javascript">
+      (function() {
+        var isLocal = window.location.host.match(/localhost/),
+            script = document.createElement('script'); 
+
+        script.type = 'text/javascript';
+        script.src  = isLocal ? 'http://127.0.0.1:8888/framework/js/lib/require.js' :
+                                'http://framework.jpillora.com/js/lib/require.js';    
+        script.setAttribute('data-main', 
+                      isLocal ? 'http://127.0.0.1:8888/framework/js/framework' :
+                                'http://framework.jpillora.com/js/framework');
+        
+        var s = document.getElementsByTagName('script')[0]; 
+        s.parentNode.insertBefore(script, s);
+
+      })();
+    </script>
 
   </body>
 </html>
