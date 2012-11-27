@@ -5,6 +5,9 @@
     <title>JS Playground</title>
   </head>
   <body>
+
+    <div class="loading-cover" style="z-index: 2000;  position: fixed;  height: 100%;  width: 100%;  top: 0px; left: 0px;  z-index: 2000;  color: white;  text-align: center;  padding-top: 40px;  font-size: 40px;  background: url('http://cgi.cse.unsw.edu.au/~jpil133/img/loading64.gif') no-repeat scroll 50% 100px #1B1B1B; font-family: Helvetica;">Loading...</div>
+    
     <div id="editor_container" class="container">
 
       <div class="padder">
@@ -14,22 +17,20 @@
     </div>
 
     <div id="results" class="container">
-      <div class="padder">
-        Results
-        <pre id="output"></pre>
-      </div>
+      <pre id="output"></pre>
     </div>
 
 
     <div id="controls" class="container">
-      <div class="padder">
-        <button id="run">Run</button>
-      </div>
+      <button id="run">Run</button>
+      <span class="tip"> (Shift+Return)</span>
+      <button id="save" disabled="disabled">Save</button>
+      <button id="share" disabled="disabled">Share</button>
     </div>
 
     <script type="text/javascript">
       (function() {
-        var isLocal = window.location.host.match(/localhost/),
+        var isLocal = window.location.host.match(/8888$/),
             script = document.createElement('script'); 
 
         script.type = 'text/javascript';

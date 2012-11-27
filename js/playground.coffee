@@ -1,39 +1,56 @@
 
 define [
   'util/log'
-  'ext/ace'
+  'ace'
   'less!../stylesheets/playground'
   'underscore'
   'lib/prettify'
   'bootstrap'],
   (log, aceExt) ->
 
-    log 'running playground coffee'
+    init = ->
+      log 'running playground coffee'
+      editor = ace.edit("editor")
+      editor.getSession().setMode("ace/mode/javascript");
+      editor.setValue("print(_.range(1,20));");
+      window.editor = editor
+      $window = $(window)
 
-    editor = ace.edit("editor")
-    editor.getSession().setMode("ace/mode/javascript");
-    editor.setValue("print(42);");
+      editor.setKeyboardHandler
+        handleKeyboard: (data, hashId, keyString, keyCode, e) ->
+          if keyString is 'return' and e.shiftKey
+            runCode()
+            e.preventDefault()
+            return false
+          return true
 
-    controlHeight = 50
+      context = (() ->
+        @window = {}
+        @document = {}
+        @log = (s) -> console.log s
+        @print = (s) -> $("#output").append  s + "\n";
+      )();
 
-    $window = $(window)
+      resize = ->
+        console.log 'resize'
+        $('#editor,#results').height $window.height()
 
-    context = (() ->
-      @log = (s) -> console.log s
-      @print = (s) -> $("#output").append  s + "\n";
-    )();
+      runCode = ->
+        $("#output").empty()
+        code = editor.getValue()
+        eval.apply(context, [code])
 
-    resize = -> 
-      $('#editor,#results').height $window.height() - controlHeight
-      $('#controls').height controlHeight
+      $(document).ready ->
+        $('#run').click runCode
+        runCode()
+        $('.loading-cover').fadeOut()
 
-    runCode = ->
-      $("#output").empty()
-      code = editor.getValue()
-      eval.apply(context, [code])
+      $(window).resize resize
+      resize()
 
-    $(document).ready ->
-      $('#run').click runCode
+    init.t = setInterval -> 
+      if window.ace isnt `undefined`
+        clearInterval(init.t)
+        init()
+    , 500
 
-    $(window).resize resize
-    resize()

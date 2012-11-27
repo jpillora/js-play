@@ -5,11 +5,17 @@ body {
   padding: 0px;
 }
 
+body > div {
+  background-color: whiteSmoke;
+}
+
+pre {
+  border-radius: 0px;
+  border: none;
+}
+
 .container {
   position: absolute;
-  .padder {
-    padding: 10px;
-  }
 }
 
 #editor_container {
@@ -27,11 +33,22 @@ body {
 }
 
 #controls {
-  width: 100%;
+  opacity: 0.8;
+  z-index: 10;
   bottom: 0px;
+  padding: 10px;
+  margin: 10px;
+  border: thin solid #999;
+  border-radius: 5px;
+  display: inline;
+  width: initial;
+  .tip {
+    font-style: italic;font-size: 0.75em;
+  }
 }
 
 #results {
+  overflow: scroll;
   width: 50%;
   right: 0px;
   #output {
