@@ -1,5 +1,6 @@
 
 define [
+  'lib/coffee-script'
   'util/log'
   'ace'
   'less!../stylesheets/playground'
@@ -7,16 +8,25 @@ define [
   'lib/prettify'
   'bootstrap.js'
   'bootstrap.css'],
-  (log, aceExt) ->
+  (CoffeeScript, log, aceExt) ->
 
     init = ->
       log 'running playground coffee'
       $window = $(window)
 
       editor = ace.edit("editor")
-      editor.getSession().setMode("ace/mode/javascript");
       editor.setShowPrintMargin(false);
       window.editor = editor
+      window.CoffeeScript = CoffeeScript
+
+      codeTemplate = _.template """
+        (function() {
+          //@ sourceURL=<%= count %>.js
+          var window = {};
+          var document = {};
+          <%= code %>
+        }());
+        """
 
       #ace customisations
       editor.setKeyboardHandler
@@ -42,31 +52,53 @@ define [
         $(".alert").fadeIn()
         showAlert.t = setTimeout hideAlert, 3000
 
-      hideAlert = -> $(".alert").fadeOut()
+      hideAlert = -> 
+        $(".alert").fadeOut()
+
+      useCoffeeScript = (bool) ->
+        if bool isnt `undefined`
+          changed = bool isnt useCoffeeScript()
+          $("#coffeeToggle")[0].checked = bool
+          setEditMode() if changed
+          return bool
+        
+        return $("#coffeeToggle")[0].checked
+
+      setEditMode = ->
+        mode = if useCoffeeScript() then "coffee" else "javascript"
+        editor.getSession().setMode("ace/mode/#{mode}")
 
       #on resize
       resize = ->
-        console.log 'resize'
         $('#editor,#results').height $window.height()
 
       runCount = 0
       runCode = ->
         $("#output").empty()
         
-        code = """
-          (function() {
-            //@ sourceURL=#{(runCount++)}.js
+        value = editor.getValue()
 
-            var window = {};
-            var document = {};
+        if useCoffeeScript()
+          runCoffeeScript value
+        else
+          runJavaScript value
 
-            #{editor.getValue()}
-            ;;;
-          }.call(context));
-        """
+      runCoffeeScript = (code) ->
 
         try
-          eval(code)
+          jsCode = CoffeeScript.compile code
+        catch e
+          showAlert.apply @, e.toString().split(":")
+          return
+
+        runJavaScript jsCode
+
+      runJavaScript = (code) ->
+
+        finalCode = codeTemplate { count: runCount++, code }
+
+        try
+          eval.call context, finalCode
         catch e
           showAlert.apply @, e.toString().split(":")
 
@@ -74,39 +106,55 @@ define [
         editor.setValue c
 
       #save and load functions
-      storeCode = ->
+      saveCode = ->
         key = $("#saveName").val()
         return unless key
-        localStorage[key] = editor.getValue()
+        localStorage[key] = JSON.stringify
+          coffee: useCoffeeScript()
+          code: editor.getValue()
 
         updateLoadList()
+        localStorage['__lastSave__'] = key
 
-      loadCode = (e) ->
-        key = $(e.currentTarget).html()
-        setCode localStorage[key]
+      loadCodeEvent = (e) -> 
+        loadCode $(e.currentTarget).html()
+
+      loadCode = (key) ->
+        stored = localStorage[key]
+        return false unless stored
+        {coffee, code} = JSON.parse stored
+        setCode code
+        useCoffeeScript coffee
         toggleLoadList()
+        return true
 
       toggleLoadList = ->
         $("#loadList").slideToggle()
 
       updateLoadList = ->
         items = _.map _.keys(localStorage), (k) ->
-          "<div>#{k}</div>"
+          if k is "__lastSave__" then "" else "<div>#{k}</div>"
         $("#loadList").html items.join('')
         
       initSaveLoad = ->
+
+        $("#loadList").hide().on "click", "div", loadCodeEvent
+
         if typeof(Storage) is `undefined`
           $("#save,#load").attr('disabled', 'disabled')
           return
       
-        $("#save").click storeCode
+        $("#save").click saveCode
         $("#load").click toggleLoadList
-        $("#loadList").hide().on "click", "div", loadCode
         updateLoadList()
 
       initRun = ->
+        $("#coffeeToggle").change setEditMode
         $('#run').click runCode
-        setCode "print(_.range(1,20));"
+
+        unless loadCode localStorage['__lastSave__']
+          setCode "print(_.range(1,20));"
+
         runCode()
 
       initAlert = ->
