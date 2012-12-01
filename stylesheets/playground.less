@@ -14,6 +14,13 @@ pre {
   border: none;
 }
 
+.alert {
+  position: absolute;
+  z-index: 10;
+  margin: 10px;
+  opacity: 0.8;
+  bottom: 60px;
+}
 .container {
   position: absolute;
 }
@@ -45,6 +52,35 @@ pre {
   .tip {
     font-style: italic;font-size: 0.75em;
   }
+
+  #saveName {
+    width: 60px;
+  }
+
+  #loadList {
+    right: 5px;
+    padding: 6px;
+    bottom: 38px;
+    max-height: 200px;
+    overflow: scroll;
+    border: thin solid #999;
+    border-radius: 5px;
+    background: whiteSmoke;
+    width: initial;
+    div {
+      cursor: pointer;
+      text-decoration: none;
+      text-shadow: none;  
+      -webkit-transition: 100ms linear 0s;  
+      -moz-transition: 100ms linear 0s;  
+      -o-transition: 100ms linear 0s;  
+      transition: 100ms linear 0s;  
+      outline: 0 none;  
+      &:hover {
+        text-shadow: -1px 1px 8px #000, 1px -1px 8px #000;  
+      }
+    }
+  }
 }
 
 #results {
@@ -54,4 +90,8 @@ pre {
   #output {
     background: whiteSmoke;
   }
+
+
 }
+
+

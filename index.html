@@ -6,6 +6,10 @@
   </head>
   <body>
 
+    <div class="alert alert-error">
+      <strong></strong><span></span>
+    </div>
+
     <div class="loading-cover" style="z-index: 2000;  position: fixed;  height: 100%;  width: 100%;  top: 0px; left: 0px;  z-index: 2000;  color: white;  text-align: center;  padding-top: 40px;  font-size: 40px;  background: url('http://cgi.cse.unsw.edu.au/~jpil133/img/loading64.gif') no-repeat scroll 50% 100px #1B1B1B; font-family: Helvetica;">Loading...</div>
     
     <div id="editor_container" class="container">
@@ -24,8 +28,15 @@
     <div id="controls" class="container">
       <button id="run">Run</button>
       <span class="tip"> (Shift+Return)</span>
-      <button id="save" disabled="disabled">Save</button>
-      <button id="share" disabled="disabled">Share</button>
+      <button id="save">Save</button>
+      <input id="saveName"/>
+      <button id="load">Load</button>
+      <div id="loadList" class="container">
+        <div>result1</div>
+        <div>result1</div>
+        <div>result1</div>
+        <div>result1</div>
+      </div>
     </div>
 
     <script type="text/javascript">
