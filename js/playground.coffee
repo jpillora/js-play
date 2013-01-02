@@ -150,6 +150,7 @@ define [
 
       initRun = ->
         $("#coffeeToggle").change setEditMode
+        setEditMode()
         $('#run').click runCode
 
         unless loadCode localStorage['__lastSave__']
