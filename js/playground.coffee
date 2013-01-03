@@ -7,7 +7,8 @@ define [
   'underscore'
   'lib/prettify'
   'bootstrap.js'
-  'bootstrap.css'],
+  'bootstrap.css'
+  'ext/jquery'],
   (CoffeeScript, log, aceExt) ->
 
     init = ->
