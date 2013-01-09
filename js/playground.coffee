@@ -154,8 +154,8 @@ define [
         setEditMode()
         $('#run').click runCode
 
-        unless loadCode localStorage['__lastSave__']
-          setCode "print(_.range(1,20));"
+        # unless loadCode localStorage['__lastSave__']
+        setCode "print(_.range(1,20));"
 
         runCode()
 
