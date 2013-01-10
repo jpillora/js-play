@@ -23,8 +23,6 @@ define [
       codeTemplate = _.template """
         (function() {
           //@ sourceURL=<%= count %>.js
-          var window = {};
-          var document = {};
           <%= code %>
         }());
         """
