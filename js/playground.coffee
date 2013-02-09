@@ -19,6 +19,9 @@ define [
       editor.setShowPrintMargin(false);
       window.editor = editor
       window.CoffeeScript = CoffeeScript
+      #remove amd flag - load scripts to window
+      window.define.amd = null;
+      loadedScripts = []
 
       codeTemplate = _.template """
         (function() {
@@ -38,17 +41,18 @@ define [
 
       #extra scope
       context = (() ->
-        @log = (s) -> 
-          console.log s
-        @print = (s) ->
-          $("#output").append  s + "\n";
-      )();
+        @log   = (s) -> console.log s
+        @print = (s) -> $("#output").append s + "\n"
+      )()
 
       showAlert = (type, msg) ->
         clearTimeout showAlert.t
         $(".alert strong").html(type)
         $(".alert span").html(msg)
-        $(".alert").fadeIn()
+        $(".alert").
+          toggleClass('alert-error', !!type.match(/error/i)).
+          toggleClass('alert-success', !!type.match(/success/i)).
+          fadeIn()
         showAlert.t = setTimeout hideAlert, 3000
 
       hideAlert = -> 
@@ -83,7 +87,6 @@ define [
           runJavaScript value
 
       runCoffeeScript = (code) ->
-
         try
           jsCode = CoffeeScript.compile code
         catch e
@@ -93,9 +96,7 @@ define [
         runJavaScript jsCode
 
       runJavaScript = (code) ->
-
         finalCode = codeTemplate { count: runCount++, code }
-
         try
           eval.call context, finalCode
         catch e
@@ -111,9 +112,18 @@ define [
         localStorage[key] = JSON.stringify
           coffee: useCoffeeScript()
           code: editor.getValue()
+          scripts: loadedScripts
 
         updateLoadList()
         localStorage['__lastSave__'] = key
+
+      loadScript = (file) ->
+        file = $('#scriptUrl').val() if typeof file isnt 'string'
+        return showAlert("Error", "Missing URL") unless file
+        name = file.match(/[^\/]*$/)[0]
+        $.getScript file, ->
+          showAlert "Successfully loaded", name
+          loadedScripts.push file
 
       loadCodeEvent = (e) -> 
         loadCode $(e.currentTarget).html()
@@ -121,10 +131,15 @@ define [
       loadCode = (key) ->
         stored = localStorage[key]
         return false unless stored
-        {coffee, code} = JSON.parse stored
+        {coffee, code, scripts} = JSON.parse stored
         setCode code
         useCoffeeScript coffee
         toggleLoadList()
+
+        _.each scripts, (s) ->
+          unless _.contains loadedScripts, s
+            loadScript s
+
         return true
 
       toggleLoadList = ->
@@ -136,13 +151,10 @@ define [
         $("#loadList").html items.join('')
         
       initSaveLoad = ->
-
         $("#loadList").hide().on "click", "div", loadCodeEvent
-
         if typeof(Storage) is `undefined`
           $("#save,#load").attr('disabled', 'disabled')
           return
-      
         $("#save").click saveCode
         $("#load").click toggleLoadList
         updateLoadList()
@@ -151,10 +163,7 @@ define [
         $("#coffeeToggle").change setEditMode
         setEditMode()
         $('#run').click runCode
-
-        # unless loadCode localStorage['__lastSave__']
         setCode "print(_.range(1,20));"
-
         runCode()
 
       initAlert = ->
@@ -165,6 +174,7 @@ define [
         initSaveLoad() 
         initRun()
         initAlert()
+        $('#scriptLoad').click loadScript
         $('.loading-cover').fadeOut()
 
       $(window).resize resize

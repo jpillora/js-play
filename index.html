@@ -7,7 +7,7 @@
   <body>
 
     <div class="alert alert-error">
-      <strong></strong><span></span>
+      <strong></strong> <span></span>
     </div>
 
     <div class="loading-cover" style="z-index: 2000;  position: fixed;  height: 100%;  width: 100%;  top: 0px; left: 0px;  z-index: 2000;  color: white;  text-align: center;  padding-top: 40px;  font-size: 40px;  background: url('http://cgi.cse.unsw.edu.au/~jpil133/img/loading64.gif') no-repeat scroll 50% 100px #1B1B1B; font-family: Helvetica;">Loading...</div>
@@ -30,14 +30,12 @@
       <!-- <span class="tip"> (Shift+Return)</span> -->
       <label for="coffeeToggle">CoffeeScript</label>
       <input id="coffeeToggle" type="checkbox"/>
+      <input id="scriptUrl" placeholder="../my-lib.js" class="input-small"/>
+      <button id="scriptLoad">Load Script</button>
+      <input id="saveName" placeholder="calcuate"/>
       <button id="save">Save</button>
-      <input id="saveName"/>
-      <button id="load">Load</button>
+      <button id="load">Restore</button>
       <div id="loadList" class="container">
-        <div>result1</div>
-        <div>result1</div>
-        <div>result1</div>
-        <div>result1</div>
       </div>
     </div>
 
