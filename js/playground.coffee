@@ -42,7 +42,7 @@ define [
       #extra scope
       context = (() ->
         @log   = (s) -> console.log s
-        @print = (s) -> $("#output").append s + "\n"
+        @print = (s) -> $("#output").append $("<span/>").text("#{s}\n") 
       )()
 
       showAlert = (type, msg) ->
