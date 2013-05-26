@@ -42,6 +42,7 @@ define [
       #extra scope
       context = (() ->
         @log   = (s) -> console.log s
+        @json  = (obj) => @print JSON.stringify obj, null, 2
         @print = (s) -> $("#output").append $("<span/>").text("#{s}\n") 
       )()
 
