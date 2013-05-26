@@ -11,6 +11,8 @@ define [
   'ext/jquery'],
   (CoffeeScript, log, aceExt) ->
 
+    log('init!')
+
     init = ->
       log 'running playground coffee'
       $window = $(window)
@@ -41,8 +43,8 @@ define [
 
       #extra scope
       context = (() ->
-        @log   = (s) -> console.log s
         @json  = (obj) => @print JSON.stringify obj, null, 2
+        @log   = (s) -> console.log s
         @print = (s) -> $("#output").append $("<span/>").text("#{s}\n") 
       )()
 
