@@ -1,61 +1,22 @@
-
 <!DOCTYPE html>
 <html>
   <head>
-    <title>JS Playground</title>
+    <link rel="stylesheet" href="/css/app.css">
   </head>
-  <body>
-
-    <div class="alert alert-error">
-      <strong></strong> <span></span>
+  <body ng-app="playground">
+    <div id="ace"></div>
+    <div id="out" ng-controller="Output">
+      <pre ng-bind="output"></pre>
     </div>
-
-    <div class="loading-cover" style="z-index: 2000;  position: fixed;  height: 100%;  width: 100%;  top: 0px; left: 0px;  z-index: 2000;  color: white;  text-align: center;  padding-top: 40px;  font-size: 40px;  background: url('img/loading.gif') no-repeat scroll 50% 100px #1B1B1B; font-family: Helvetica;">Loading...</div>
-    
-    <div id="editor_container" class="container">
-
-      <div class="padder">
-        <pre id="editor"></pre>
-      </div>
-
+    <div id="controls" ng-controller="Controls">
+      <button ng-click="run()">Run</button>
+      <button ng-click="login()">Login</button>
     </div>
-
-    <div id="results" class="container">
-      <pre id="output"></pre>
-    </div>
-
-
-    <div id="controls" class="container">
-      <button id="run">Run</button>
-      <!-- <span class="tip"> (Shift+Return)</span> -->
-      <label for="coffeeToggle">CoffeeScript</label>
-      <input id="coffeeToggle" type="checkbox"/>
-      <input id="scriptUrl" placeholder="../my-lib.js" class="input-small"/>
-      <button id="scriptLoad">Load Script</button>
-      <input id="saveName" placeholder="calcuate"/>
-      <button id="save">Save</button>
-      <button id="load">Restore</button>
-      <div id="loadList" class="container">
-      </div>
-    </div>
-
-    <script type="text/javascript">
-      (function() {
-        var isLocal = window.location.host.match(/8888$/),
-            script = document.createElement('script'); 
-
-        script.type = 'text/javascript';
-        script.src  = isLocal ? 'http://127.0.0.1:8888/framework/js/lib/require.js' :
-                                'http://framework.jpillora.com/js/lib/require.js';    
-        script.setAttribute('data-main', 
-                      isLocal ? 'http://127.0.0.1:8888/framework/js/framework' :
-                                'http://framework.jpillora.com/js/framework');
-        
-        var s = document.getElementsByTagName('script')[0]; 
-        s.parentNode.insertBefore(script, s);
-
-      })();
-    </script>
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.2.1/lodash.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
+    <script src="/js/app.js"></script>
   </body>
 </html>

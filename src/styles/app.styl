@@ -1,0 +1,48 @@
+
+darkGrey = #272822
+lightGrey = #2F3129
+
+html, body
+  background darkGrey
+  width 100%
+  height 100%
+  margin 0
+  padding 0
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+
+#ace
+  font-size 16px
+  position absolute
+  top 0
+  left 0
+  width 50%
+  height 100%
+  z-index: 1
+
+#out
+  font-size 16px
+  margin 5px
+  position absolute
+  top 0
+  left 50%
+  width 50%
+  height 100%
+  z-index: 1
+  border-left lightGrey thin solid
+  color white
+
+#controls
+  background lightGrey
+  border-radius 5px
+  position absolute
+  bottom 0
+  right 0
+  padding 10px
+  margin 10px
+  z-index: 2
+
+
+
+//custom ace
+.ace_scrollbar
+  display none !important

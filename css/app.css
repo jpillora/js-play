@@ -1,0 +1,55 @@
+
+/* line 1 : /Users/jpillora/.grunt-sources/web/node_modules/grunt-contrib-stylus/node_modules/stylus/lib/functions/index.styl */
+
+/* line 5 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+html,
+body {
+  background: #272822;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
+/* line 13 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+#ace {
+  font-size: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* line 22 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+#out {
+  font-size: 16px;
+  margin: 5px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+  border-left: #2f3129 thin solid;
+  color: #fff;
+}
+
+/* line 34 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+#controls {
+  background: #2f3129;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  margin: 10px;
+  z-index: 2;
+}
+
+/* line 47 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+.ace_scrollbar {
+  display: none !important;
+}

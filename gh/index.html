@@ -1,0 +1,23 @@
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  github login
+
+  <script type="text/javascript">
+    if(/\?code=(.*)/.test(window.location.href)) {
+      var code = RegExp.$1;
+      function sendCode(event) {
+        window.removeEventListener('message', sendCode);
+        event.source.postMessage(code,"*");
+        window.close();
+      }
+      window.addEventListener('message', sendCode);
+    } else {
+      alert("missing code");
+    }
+
+  </script>
+</body>
+</html>
