@@ -1,9 +1,13 @@
-App.factory 'ace', ($rootScope) ->
+App.factory 'ace', ($rootScope, storage) ->
 
   scope = $rootScope.$new true
 
+  Range = ace.require('ace/range').Range
   editor = ace.edit "ace"
   session = editor.getSession()
+
+  scope._editor = editor
+  scope._session = session
 
   #handler list
   handlers = {}
@@ -22,8 +26,8 @@ App.factory 'ace', ($rootScope) ->
 
   #apply new settings
   scope.config = (c) ->
-    editor.setTheme c.theme if c.theme
-    session.setMode c.mode if c.mode
+    editor.setTheme "ace/theme/#{c.theme}" if c.theme
+    session.setMode "ace/mode/#{c.mode}" if c.mode
     session.setTabSize c.tabSize if 'tabSize' of c
     session.setUseSoftTabs c.softTabs if 'softTabs' of c
     editor.setShowPrintMargin c.printMargin if 'printMargin' of c
@@ -34,20 +38,24 @@ App.factory 'ace', ($rootScope) ->
   scope.get = ->
     session.getValue()
 
-  scope.select = ->
-    session.addMarker(new Range(1, 0, 15, 0), "ace_active_line", "background");
-
+  scope.highlight = (loc, t = 3000) ->
+    r = new Range(loc.row, loc.col, loc.row, loc.col+1)
+    m = session.addMarker r, "ace_warning", "text", true
+    setTimeout ->
+      session.removeMarker m
+    , t
 
   #apply default config
   scope.config
-    theme: "ace/theme/monokai"
-    mode: "ace/mode/javascript"
+    theme: "monokai"
     tabSize: 2
     softTabs: true
     printMargin: false
   #set default code
-  scope.set "console.log('hello world!');"
+  scope.set storage.get('current-code') or "console.log('hello world!');"
 
-  # editor.on 'change', update
+  editor.on 'change', ->
+    storage.set 'current-code', scope.get()
+
   scope
 

@@ -6,4 +6,5 @@
 App.run ($rootScope, gh) ->
   console.log 'playground init'
 
+  $("#loading-cover").fadeOut 1000, -> $(@).remove()
 
