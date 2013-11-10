@@ -3538,7 +3538,7 @@ $.notify.addStyle("bootstrap", {
     gh = $rootScope.$new(true);
     gh.login = function() {
       var check, recieveCode, recieved, win;
-      win = window.open('https://github.com/login/oauth/authorize?' + 'client_id=222d95176d7d50c1b8a3', 'gh-login', 'top=100,left=100');
+      win = window.open('https://github.com/login/oauth/authorize?' + 'client_id=222d95176d7d50c1b8a3&' + 'scope=gist', 'gh-login', 'top=100,left=100');
       recieved = false;
       recieveCode = function(e) {
         recieved = true;
@@ -3581,8 +3581,21 @@ $.notify.addStyle("bootstrap", {
       output = "";
       context = (function() {
         return this.console = {
-          log: function(s) {
-            return output += s;
+          log: function() {
+            var arg, args, str, _i, _len;
+            args = Array.prototype.slice.call(arguments);
+            str = "";
+            for (_i = 0, _len = args.length; _i < _len; _i++) {
+              arg = args[_i];
+              switch (typeof arg) {
+                case "object":
+                  str += JSON.stringify(arg);
+                  break;
+                default:
+                  str += arg;
+              }
+            }
+            return output += str + "\n";
           }
         };
       })();
@@ -3603,7 +3616,7 @@ $.notify.addStyle("bootstrap", {
           evalPath: 'js/eval.js'
         });
         p.require('//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.2.1/lodash.min.js');
-        return p.spawn(workerFn).then(function(result) {
+        p.spawn(workerFn).then(function(result) {
           if (typeof result === 'object') {
             $.notify(result.err);
             return;
@@ -3613,6 +3626,7 @@ $.notify.addStyle("bootstrap", {
         }, function(err) {
           return console.error("Parallel Worker Failed: ", err);
         });
+        return window.currp = p;
       }
     };
   });

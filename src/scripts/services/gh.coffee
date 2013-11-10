@@ -5,9 +5,10 @@ App.factory 'gh', ($http, $rootScope) ->
 
   gh.login = ->
     win = window.open 'https://github.com/login/oauth/authorize?'+
-        'client_id=222d95176d7d50c1b8a3',
-        'gh-login',
-        'top=100,left=100'
+                      'client_id=222d95176d7d50c1b8a3&'+
+                      'scope=gist',
+                      'gh-login',
+                      'top=100,left=100'
     recieved = false
     recieveCode = (e) ->
       recieved = true
@@ -33,5 +34,7 @@ App.factory 'gh', ($http, $rootScope) ->
     gh.github = new Github
       token: obj.token
     gh.$broadcast 'authenticated'
+
+  
 
   gh

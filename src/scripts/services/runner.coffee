@@ -5,9 +5,16 @@ App.factory 'runner', ($rootScope) ->
 
     output = ""
 
-    context = (() ->
+    context = (->
       @console =
-        log: (s) -> output += s
+        log: ->
+          args = Array::slice.call arguments
+          str = ""
+          for arg in args
+            switch typeof arg
+              when "object" then str += JSON.stringify arg
+              else str += arg
+          output += str + "\n"
     )()
 
     try
@@ -35,5 +42,5 @@ App.factory 'runner', ($rootScope) ->
     , (err) ->
       console.error "Parallel Worker Failed: ", err
     
-
+    window.currp = p
 

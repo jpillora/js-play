@@ -34,19 +34,21 @@ body {
   z-index: 1;
   border-left: #2f3129 thin solid;
   padding-left: 5px;
+  overflow-y: auto;
 }
 
-/* line 32 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 33 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 #out pre {
+  word-wrap: break-word;
   font-size: 16px;
   line-height: 21px;
   color: #fff;
   margin: 0;
 }
 
-/* line 38 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 40 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 #controls {
-  opacity: 0.75;
+  opacity: 0.85;
   background: #2f3129;
   border-radius: 5px;
   position: absolute;
@@ -57,7 +59,7 @@ body {
   z-index: 2;
 }
 
-/* line 48 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 50 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 #controls .btn {
   margin: 5px;
   border-radius: 12px;
@@ -66,18 +68,18 @@ body {
   display: inline-block;
 }
 
-/* line 49 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 51 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 #controls .btn img {
   width: 32px;
   height: 32px;
 }
 
-/* line 54 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 56 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 #controls .btn.run {
   border-radius: 2px;
 }
 
-/* line 59 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 61 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 #controls .btn:hover,
 #controls .btn.active {
   cursor: pointer;
@@ -85,12 +87,12 @@ body {
   background: #fff;
 }
 
-/* line 66 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 68 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 .ace_scrollbar {
   display: none !important;
 }
 
-/* line 69 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 71 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 .ace_warning {
   background: rgba(255,50,50,0.1);
   position: absolute;
