@@ -3582,20 +3582,14 @@ $.notify.addStyle("bootstrap", {
       context = (function() {
         return this.console = {
           log: function() {
-            var arg, args, str, _i, _len;
+            var arg, args, strs, _i, _len;
             args = Array.prototype.slice.call(arguments);
-            str = "";
+            strs = [];
             for (_i = 0, _len = args.length; _i < _len; _i++) {
               arg = args[_i];
-              switch (typeof arg) {
-                case "object":
-                  str += JSON.stringify(arg);
-                  break;
-                default:
-                  str += arg;
-              }
+              str.push(typeof arg === "object" ? JSON.stringify(arg) : str.push(arg));
             }
-            return output += str + "\n";
+            return output += strs.join(" ") + "\n";
           }
         };
       })();

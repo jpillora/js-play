@@ -9,12 +9,13 @@ App.factory 'runner', ($rootScope) ->
       @console =
         log: ->
           args = Array::slice.call arguments
-          str = ""
+          strs = []
           for arg in args
-            switch typeof arg
-              when "object" then str += JSON.stringify arg
-              else str += arg
-          output += str + "\n"
+            str.push if typeof arg is "object"
+              JSON.stringify arg
+            else
+              str.push arg
+          output += strs.join(" ") + "\n"
     )()
 
     try
