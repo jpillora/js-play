@@ -11,10 +11,10 @@ App.factory 'runner', ($rootScope) ->
           args = Array::slice.call arguments
           strs = []
           for arg in args
-            str.push if typeof arg is "object"
+            strs.push if typeof arg is "object"
               JSON.stringify arg
             else
-              str.push arg
+              arg
           output += strs.join(" ") + "\n"
     )()
 

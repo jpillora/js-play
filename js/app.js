@@ -3385,7 +3385,7 @@ $.notify.addStyle("bootstrap", {
 
   App = angular.module('playground', []);
 
-  App.controller('Controls', function($scope, ace, gh, runner, storage) {
+  App.controller('Controls', function($scope, $window, ace, gh, runner, storage) {
     var scope;
     scope = $scope;
     window.app = {
@@ -3398,11 +3398,12 @@ $.notify.addStyle("bootstrap", {
     ace.config({
       mode: scope.mode
     });
+    console.log('mode', scope.mode);
     scope.login = function() {
       return gh.login();
     };
     gh.$on('authenticated', function() {
-      console.log('github ready!');
+      scope.ghReady = true;
       return window.gh = gh;
     });
     scope.coffee = function() {
@@ -3587,7 +3588,7 @@ $.notify.addStyle("bootstrap", {
             strs = [];
             for (_i = 0, _len = args.length; _i < _len; _i++) {
               arg = args[_i];
-              str.push(typeof arg === "object" ? JSON.stringify(arg) : str.push(arg));
+              strs.push(typeof arg === "object" ? JSON.stringify(arg) : arg);
             }
             return output += strs.join(" ") + "\n";
           }

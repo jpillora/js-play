@@ -1,5 +1,5 @@
 
-App.controller 'Controls', ($scope, ace, gh, runner, storage) ->
+App.controller 'Controls', ($scope, $window, ace, gh, runner, storage) ->
 
   scope = $scope
   window.app = { scope, ace, gh, runner }
@@ -7,15 +7,16 @@ App.controller 'Controls', ($scope, ace, gh, runner, storage) ->
   scope.mode = storage.get('mode') or 'javascript'
   ace.config mode:scope.mode
 
+  console.log 'mode',scope.mode
+
   #click handler
   scope.login = ->
     gh.login()
 
   #handle auth
   gh.$on 'authenticated', ->
-    console.log 'github ready!'
+    scope.ghReady = true
     window.gh = gh
-
 
   scope.coffee = ->
     if scope.mode is 'javascript'

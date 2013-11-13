@@ -41,7 +41,7 @@
     <div id="controls" ng-controller="Controls">
       <div ng-click="run()" class="run btn"><img src="img/run-js.png"></div>
       <div ng-click="coffee()" ng-class="{active: mode=='coffee'}" class="coffee btn"><img src="img/coffee.png"></div>
-      <div ng-click="login()" class="gh btn"><img src="img/octocat.png"></div>
+      <div ng-click="login()" ng-class="{active: ghReady}" class="gh btn"><img src="img/octocat.png"></div>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
