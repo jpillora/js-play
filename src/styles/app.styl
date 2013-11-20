@@ -11,65 +11,17 @@ html, body
   padding 0
   font-family 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important
 
-#ace
-  font-size 16px
+*
+  box-sizing border-box
+
+.abs
   position absolute
   top 0
   left 0
-  width 50%
+  width 100%
   height 100%
-  z-index: 1
 
-#out
-  position absolute
-  top 0
-  left 50%
-  width 50%
-  height 100%
-  z-index: 1
-  border-left lightGrey thin solid
-  padding-left 5px
-  overflow-y auto
-  pre
-    word-wrap break-word
-    font-size 16px
-    line-height 21px
-    color white
-    margin 0
-
-#controls
-  opacity 0.85
-  background lightGrey
-  border-radius 5px
-  position absolute
-  bottom 0
-  right 0
-  padding 5px
-  margin 10px
-  z-index 2
-  .btn
-    img
-      width 32px
-      height 32px
-    margin 5px
-    border-radius 12px
-    &.run
-      border-radius 2px
-    width 32px
-    height 32px
-    display inline-block
-    &:hover, &.active
-      cursor pointer
-      box-shadow 0 0 6px 4px white
-      background white
-
-
-//custom ace
-.ace_scrollbar
-  display none !important
-
-.ace_warning
-  background: rgba(255, 50, 50, 0.1);
-  position: absolute;
-  width: 100% !important;
-  left: 0 !important;
+@import "app/controls" 
+@import "app/spotlight" 
+@import "app/out" 
+@import "app/ace" 

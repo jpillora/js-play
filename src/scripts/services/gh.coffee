@@ -1,8 +1,18 @@
 
-App.factory 'gh', ($http, $rootScope) ->
+App.factory 'gh', ($http, $rootScope, $timeout, storage, console) ->
 
-  gh = $rootScope.$new true
+  gh = $rootScope.gh = $rootScope.$new true
 
+  gh.authed = false
+
+
+  #indexable gh datum
+  class GitHubDatum extends Datum
+    constructor: ->
+    save: ->
+    delete: ->
+
+  #public methods
   gh.login = ->
     win = window.open 'https://github.com/login/oauth/authorize?'+
                       'client_id=222d95176d7d50c1b8a3&'+
@@ -21,20 +31,47 @@ App.factory 'gh', ($http, $rootScope) ->
     window.addEventListener "message", recieveCode
     check()
 
+  gh.logout = ->
+    storage.del "gh-auth"
+    gh.github = null
+    gh.authed = false
+
+  #private methods
   getToken = (code) ->
-    console.log "code", code
     $http.
       get('http://js-playground-gatekeeper.herokuapp.com/authenticate/'+code).
-      success(initGithub)
+      success(init)
 
-  initGithub = (obj) ->
-    if obj.error
-      console.error obj.error
+  init = (auth) ->
+    unless auth
       return
-    gh.github = new Github
-      token: obj.token
-    gh.$broadcast 'authenticated'
 
-  
+    if auth.error
+      console.error auth.error
+      return
+
+    auth.date = Date.now()
+    gh.github = new Github
+      token: auth.token
+
+    gh.authed = true
+    storage.set "gh-auth", auth
+    gh.$broadcast 'authenticated'
+    console.log "gh: init: %s", auth.token
+
+    loadGists()
+
+  loadGists = ->
+    gh.github.getUser().gists (err, gists) ->
+      return console.error err if err
+      gh.gists = gists
+      
+
+  #reload last session
+  $timeout ->
+    init storage.get "gh-auth"
 
   gh
+
+
+

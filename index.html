@@ -8,7 +8,7 @@
     </script>
   </head>
   <body ng-app="playground">
-    <div id="spinner" style="position:absolute;top:10px;right:40px;" ng-show="loading"></div>
+    <div id="spinner" style="position:absolute;top:10px;left:40px;" ng-show="loading"></div>
     <script>
       new Spinner({
         lines: 25,
@@ -34,14 +34,51 @@
         </g>
       </svg>
     </div>
-    <div id="ace"></div>
-    <div id="out" ng-controller="Output">
+    <div id="spotlight" class="abs">
+      <div class="fader abs"></div>
+      <div class="container">
+        <div class="inputs abs">
+          <div class="ui fluid icon input">
+            <input type="text" placeholder="Search..."><i class="search icon"></i>
+          </div>
+        </div>
+        <div class="results">
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+          <p>results...</p>
+        </div>
+      </div>
+    </div>
+    <div id="ace" class="abs"></div>
+    <div id="out" ng-controller="Output" class="abs">
       <pre ng-bind="output"></pre>
     </div>
     <div id="controls" ng-controller="Controls">
       <div ng-click="run()" class="run btn"><img src="img/run-js.png"></div>
       <div ng-click="coffee()" ng-class="{active: mode=='coffee'}" class="coffee btn"><img src="img/coffee.png"></div>
-      <div ng-click="login()" ng-class="{active: ghReady}" class="gh btn"><img src="img/octocat.png"></div>
+      <div ng-click="login()" ng-class="{active: gh.authed}" class="gh btn"><img src="img/octocat.png"></div>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>

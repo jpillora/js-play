@@ -1,6 +1,6 @@
 App.factory 'ace', ($rootScope, storage) ->
 
-  scope = $rootScope.$new true
+  scope = $rootScope.ace = $rootScope.$new true
 
   Range = ace.require('ace/range').Range
   editor = ace.edit "ace"
@@ -52,10 +52,10 @@ App.factory 'ace', ($rootScope, storage) ->
     softTabs: true
     printMargin: false
   #set default code
-  scope.set storage.get('current-code') or "console.log('hello world!');"
+  scope.set storage.get('ace-current-code') or "console.log('hello world!');"
 
   editor.on 'change', ->
-    storage.set 'current-code', scope.get()
+    storage.set 'ace-current-code', scope.get()
 
   scope
 

@@ -1,5 +1,10 @@
 App.factory 'storage', ->
 
+  # class LocalDatum extends Datum
+  #   constructor: ->
+  #   delete: ->
+
+
   get: (key) ->
     str = localStorage.getItem key
     if str and str.substr(0,4) is "J$ON"
@@ -11,3 +16,5 @@ App.factory 'storage', ->
       val = "J$ON#{JSON.stringify(val)}"
     localStorage.setItem key, val
 
+  del: (key) ->
+    localStorage.removeItem key

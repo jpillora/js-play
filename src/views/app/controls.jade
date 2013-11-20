@@ -1,0 +1,7 @@
+#controls(ng-controller="Controls")
+  .run.btn(ng-click="run()")
+    img(src="img/run-js.png")
+  .coffee.btn(ng-click="coffee()", ng-class="{active: mode=='coffee'}")
+    img(src="img/coffee.png")
+  .gh.btn(ng-click="login()", ng-class="{active: gh.authed}")
+    img(src="img/octocat.png")
