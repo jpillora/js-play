@@ -1,16 +1,15 @@
 
-App.factory 'gh', ($http, $rootScope, $timeout, storage, console) ->
+App.factory 'gh', ($http, $rootScope, $timeout, storage, console, datums) ->
 
   gh = $rootScope.gh = $rootScope.$new true
 
   gh.authed = false
 
-
   #indexable gh datum
-  class GitHubDatum extends Datum
-    constructor: ->
+  datums.type 'gist', {
     save: ->
-    delete: ->
+    remove: ->
+  }
 
   #public methods
   gh.login = ->
@@ -58,7 +57,6 @@ App.factory 'gh', ($http, $rootScope, $timeout, storage, console) ->
     storage.set "gh-auth", auth
     gh.$broadcast 'authenticated'
     console.log "gh: init: %s", auth.token
-
     loadGists()
 
   loadGists = ->

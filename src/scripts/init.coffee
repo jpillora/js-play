@@ -2,4 +2,7 @@
 $.notify.defaults
   position: 'bottom left'
 
-App = angular.module 'playground', []
+Modes = []
+CloudServices = []
+
+App = window.App = angular.module 'playground', []

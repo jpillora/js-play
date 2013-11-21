@@ -1,9 +1,9 @@
-App.factory 'storage', ->
+App.factory 'storage', (datums) ->
 
-  # class LocalDatum extends Datum
-  #   constructor: ->
-  #   delete: ->
-
+  datums.type 'storage', {
+    save: ->
+    remove: ->
+  }
 
   get: (key) ->
     str = localStorage.getItem key

@@ -4516,13 +4516,19 @@ $.notify.addStyle("bootstrap", {
     })();
 })(window.jQuery);
 (function() {
-  var App;
+  var App, CloudServices, Modes,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $.notify.defaults({
     position: 'bottom left'
   });
 
-  App = angular.module('playground', []);
+  Modes = [];
+
+  CloudServices = [];
+
+  App = window.App = angular.module('playground', []);
 
   App.controller('Controls', function($rootScope, $scope, $window, ace, gh, runner, storage) {
     var scope;
@@ -4665,10 +4671,48 @@ $.notify.addStyle("bootstrap", {
     return scope;
   });
 
-  App.factory('gh', function($http, $rootScope, $timeout, storage, console) {
+  App.factory('datums', function($rootScope) {
+    var BaseDatum, datums, types;
+    datums = $rootScope.datums = $rootScope.$new(true);
+    types = {};
+    BaseDatum = (function() {
+      function BaseDatum() {}
+
+      return BaseDatum;
+
+    })();
+    datums.type = function(name, methods) {
+      var NewDatum, k, v;
+      NewDatum = (function(_super) {
+        __extends(NewDatum, _super);
+
+        function NewDatum() {}
+
+        NewDatum.prototype.name = name;
+
+        return NewDatum;
+
+      })(BaseDatum);
+      for (k in methods) {
+        v = methods[k];
+        NewDatum.prototype[k] = v;
+      }
+      types[name] = NewDatum;
+      return true;
+    };
+    datums.add = function(d) {};
+    datums.filter = function(key, val) {};
+    return datums;
+  });
+
+  App.factory('gh', function($http, $rootScope, $timeout, storage, console, datums) {
     var getToken, gh, init, loadGists;
     gh = $rootScope.gh = $rootScope.$new(true);
     gh.authed = false;
+    datums.type('gist', {
+      save: function() {},
+      remove: function() {}
+    });
     gh.login = function() {
       var check, recieveCode, recieved, win;
       win = window.open('https://github.com/login/oauth/authorize?' + 'client_id=222d95176d7d50c1b8a3&' + 'scope=gist', 'gh-login', 'top=100,left=100');
@@ -4719,20 +4763,13 @@ $.notify.addStyle("bootstrap", {
         if (err) {
           return console.error(err);
         }
-        return console.log(gists);
+        return gh.gists = gists;
       });
     };
     $timeout(function() {
       return init(storage.get("gh-auth"));
     });
     return gh;
-  });
-
-  App.factory('index', function() {
-    return {
-      add: function(key) {},
-      search: function(key, val) {}
-    };
   });
 
   App.factory('console', function() {
@@ -4797,7 +4834,11 @@ $.notify.addStyle("bootstrap", {
     };
   });
 
-  App.factory('storage', function() {
+  App.factory('storage', function(datums) {
+    datums.type('storage', {
+      save: function() {},
+      remove: function() {}
+    });
     return {
       get: function(key) {
         var str;
@@ -4829,11 +4870,13 @@ $.notify.addStyle("bootstrap", {
   });
 
   App.run(function($rootScope, gh) {
-    window.app = $rootScope;
+    window.root = $rootScope;
     console.log('playground init');
     return $("#loading-cover").fadeOut(1000, function() {
       return $(this).remove();
     });
   });
+
+  window.Plugins = angular.module('plugins', ['playground']);
 
 }).call(this);

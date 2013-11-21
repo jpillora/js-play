@@ -17477,15 +17477,16 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
 }
 
-/* line 14 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 15 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 * {
   box-sizing: border-box;
 }
 
-/* line 17 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 18 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
 .abs {
   position: absolute;
   top: 0;
@@ -17588,9 +17589,9 @@ body {
 
 /* line 8 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/out.styl */
 #out pre {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
   word-wrap: break-word;
-  font-size: 16px;
-  line-height: 21px;
+  font-size: 1.25em;
   color: #fff;
   margin: 0;
 }
@@ -17599,17 +17600,18 @@ body {
 
 /* line 2 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
 #ace {
-  font-size: 16px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+  font-size: 1.25em;
   width: 50%;
   z-index: 1;
 }
 
-/* line 8 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
+/* line 9 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
 .ace_scrollbar {
   display: none !important;
 }
 
-/* line 11 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
+/* line 12 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
 .ace_warning {
   background: rgba(255,50,50,0.1);
   position: absolute;

@@ -76,9 +76,18 @@
       <pre ng-bind="output"></pre>
     </div>
     <div id="controls" ng-controller="Controls">
-      <div ng-click="run()" class="run btn"><img src="img/run-js.png"></div>
-      <div ng-click="coffee()" ng-class="{active: mode=='coffee'}" class="coffee btn"><img src="img/coffee.png"></div>
-      <div ng-click="login()" ng-class="{active: gh.authed}" class="gh btn"><img src="img/octocat.png"></div>
+      <div ng-click="run()" class="ui vertical animated button">
+        <div class="hidden content">Run</div>
+        <div class="visible content"><i class="play icon"></i></div>
+      </div>
+      <div class="ui vertical animated button">
+        <div class="hidden content">Mode</div>
+        <div class="visible content"><i class="code icon"></i></div>
+      </div>
+      <div class="ui vertical animated button">
+        <div class="hidden content">Login</div>
+        <div class="visible content"><i class="cloud icon"></i></div>
+      </div>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>

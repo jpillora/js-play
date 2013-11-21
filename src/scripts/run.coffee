@@ -4,6 +4,9 @@ App.factory '$exceptionHandler', -> -> (exception, cause) ->
   console.error exception
 
 App.run ($rootScope, gh) ->
-  window.app = $rootScope
+  window.root = $rootScope
   console.log 'playground init'
   $("#loading-cover").fadeOut 1000, -> $(@).remove()
+
+
+window.Plugins = angular.module 'plugins', ['playground']
