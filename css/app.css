@@ -17542,7 +17542,6 @@ body {
 
 /* line 1 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/spotlight.styl */
 #spotlight {
-  display: none;
   z-index: 3;
   padding: 25px;
 }

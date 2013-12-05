@@ -1,6 +1,10 @@
 
 App.factory 'gh', ($http, $rootScope, $timeout, storage, console, datums) ->
 
+
+  #prefixed store
+  storage = storage.create 'gh'
+
   gh = $rootScope.gh = $rootScope.$new true
 
   gh.authed = false
@@ -31,7 +35,7 @@ App.factory 'gh', ($http, $rootScope, $timeout, storage, console, datums) ->
     check()
 
   gh.logout = ->
-    storage.del "gh-auth"
+    storage.del "auth"
     gh.github = null
     gh.authed = false
 
@@ -54,7 +58,7 @@ App.factory 'gh', ($http, $rootScope, $timeout, storage, console, datums) ->
       token: auth.token
 
     gh.authed = true
-    storage.set "gh-auth", auth
+    storage.set "auth", auth
     gh.$broadcast 'authenticated'
     console.log "gh: init: %s", auth.token
     loadGists()
@@ -67,7 +71,7 @@ App.factory 'gh', ($http, $rootScope, $timeout, storage, console, datums) ->
 
   #reload last session
   $timeout ->
-    init storage.get "gh-auth"
+    init storage.get "auth"
 
   gh
 

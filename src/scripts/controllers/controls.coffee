@@ -1,10 +1,15 @@
 
-App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storage) ->
+App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storage, key) ->
 
   scope = $rootScope.controls = $scope
 
+  #bind run shortcut
+  key.bind ['both+enter','shift+enter'], ->
+    scope.run()
+
   scope.mode = storage.get('mode') or 'javascript'
   ace.config mode:scope.mode
+
 
   #click handler
   scope.login = ->
@@ -53,10 +58,3 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
     runner.run(code)
 
 
-  #key handler
-  ace.handler 'key', (key, e) ->
-    if key is 'return' and e.shiftKey
-      scope.run()
-      e.preventDefault()
-
-    return

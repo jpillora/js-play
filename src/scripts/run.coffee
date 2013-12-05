@@ -1,7 +1,7 @@
 
-App.factory '$exceptionHandler', -> -> (exception, cause) ->
-  exception.message += ' (caused by "' + cause + '")';
-  console.error exception
+App.factory '$exceptionHandler', (console) -> (exception, cause) ->
+  console.error 'exception caught\n', exception.stack or exception
+  console.error 'exception cause', cause if cause
 
 App.run ($rootScope, gh) ->
   window.root = $rootScope
