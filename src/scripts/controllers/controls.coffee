@@ -10,7 +10,6 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
   scope.mode = storage.get('mode') or 'javascript'
   ace.config mode:scope.mode
 
-
   #click handler
   scope.login = ->
     gh.login()
@@ -19,7 +18,6 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
   #handle auth
   gh.$on 'authenticated', ->
     window.gh = gh
-
 
   scope.coffee = ->
     if scope.mode is 'javascript'

@@ -5650,16 +5650,20 @@ $.notify.addStyle("bootstrap", {
   });
 
   App.factory('console', function() {
-    ga('create', 'UA-38709761-12', 'jsplay.com');
+    var str;
+    ga('create', 'UA-38709761-12', window.location.hostname);
     ga('send', 'pageview');
+    str = function(args) {
+      return Array.prototype.slice.call(args).join(' ');
+    };
     return {
       log: function() {
         console.log.apply(console, arguments);
-        return ga('send', 'event', 'Log', [].slice.call(arguments).join(' '));
+        return ga('send', 'event', 'Log', str(arguments));
       },
       error: function() {
         console.error.apply(console, arguments);
-        return ga('send', 'event', 'Error', [].slice.call(arguments).join(' '));
+        return ga('send', 'event', 'Error', str(arguments));
       }
     };
   });
@@ -5892,7 +5896,7 @@ $.notify.addStyle("bootstrap", {
     };
   });
 
-  App.run(function($rootScope, gh) {
+  App.run(function($rootScope, gh, console) {
     window.root = $rootScope;
     console.log('playground init');
     return $("#loading-cover").fadeOut(1000, function() {
