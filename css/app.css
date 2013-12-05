@@ -17468,7 +17468,7 @@ ol.ui.horizontal.list li:before,
 
 /* line 1 : /Users/jpillora/.grunt-sources/web/node_modules/grunt-contrib-stylus/node_modules/stylus/lib/functions/index.styl */
 
-/* line 5 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 5 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app.styl */
 html,
 body {
   background: #272822;
@@ -17481,12 +17481,12 @@ body {
   font-size: 12px;
 }
 
-/* line 15 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 15 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app.styl */
 * {
   box-sizing: border-box;
 }
 
-/* line 18 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app.styl */
+/* line 18 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app.styl */
 .abs {
   position: absolute;
   top: 0;
@@ -17495,9 +17495,9 @@ body {
   height: 100%;
 }
 
-/* line 239 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/controls.styl */
+/* line 239 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/controls.styl */
 
-/* line 1 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/controls.styl */
+/* line 1 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/controls.styl */
 #controls {
   opacity: 0.85;
   background: #2f3129;
@@ -17510,7 +17510,7 @@ body {
   z-index: 2;
 }
 
-/* line 12 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/controls.styl */
+/* line 12 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/controls.styl */
 #controls .btn {
   margin: 5px;
   border-radius: 12px;
@@ -17519,18 +17519,18 @@ body {
   display: inline-block;
 }
 
-/* line 13 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/controls.styl */
+/* line 13 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/controls.styl */
 #controls .btn img {
   width: 32px;
   height: 32px;
 }
 
-/* line 18 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/controls.styl */
+/* line 18 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/controls.styl */
 #controls .btn.run {
   border-radius: 2px;
 }
 
-/* line 23 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/controls.styl */
+/* line 23 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/controls.styl */
 #controls .btn:hover,
 #controls .btn.active {
   cursor: pointer;
@@ -17538,23 +17538,23 @@ body {
   background: #fff;
 }
 
-/* line 27 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/spotlight.styl */
+/* line 27 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/spotlight.styl */
 
-/* line 1 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/spotlight.styl */
+/* line 1 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/spotlight.styl */
 #spotlight {
   display: none;
   z-index: 3;
   padding: 25px;
 }
 
-/* line 6 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/spotlight.styl */
+/* line 6 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/spotlight.styl */
 #spotlight .fader {
   z-index: 4;
   background: #fff;
   opacity: 0.3;
 }
 
-/* line 11 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/spotlight.styl */
+/* line 11 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/spotlight.styl */
 #spotlight .container {
   z-index: 5;
   padding: 55px 10px 10px 10px;
@@ -17563,21 +17563,21 @@ body {
   height: inherit;
 }
 
-/* line 17 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/spotlight.styl */
+/* line 17 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/spotlight.styl */
 #spotlight .container .inputs {
   height: initial;
   padding: 10px;
 }
 
-/* line 20 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/spotlight.styl */
+/* line 20 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/spotlight.styl */
 #spotlight .container .results {
   overflow: auto;
   height: 100%;
 }
 
-/* line 23 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/out.styl */
+/* line 23 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
 
-/* line 1 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/out.styl */
+/* line 1 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
 #out {
   left: 50%;
   width: 50%;
@@ -17587,7 +17587,7 @@ body {
   overflow-y: auto;
 }
 
-/* line 8 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/out.styl */
+/* line 8 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
 #out pre {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
   word-wrap: break-word;
@@ -17596,9 +17596,9 @@ body {
   margin: 0;
 }
 
-/* line 2 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
+/* line 2 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
 
-/* line 2 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
+/* line 2 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
 #ace {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
   font-size: 1.25em;
@@ -17606,12 +17606,12 @@ body {
   z-index: 1;
 }
 
-/* line 9 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
+/* line 9 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
 .ace_scrollbar {
   display: none !important;
 }
 
-/* line 12 : /Users/jpillora/Code/JavaScript/js-playground/src/styles/app/ace.styl */
+/* line 12 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
 .ace_warning {
   background: rgba(255,50,50,0.1);
   position: absolute;
