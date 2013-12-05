@@ -23,6 +23,6 @@ App.factory 'datums', ($rootScope) ->
   datums.add = (d) ->
 
   #custom angular filter
-  datums.filter = (key, val) ->
+  datums.search = (key, val) ->
 
   datums

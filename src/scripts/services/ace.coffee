@@ -9,6 +9,7 @@ App.factory 'ace', ($rootScope, storage, key) ->
   editor = ace.edit "ace"
   session = editor.getSession()
 
+  scope._ace = ace
   scope._editor = editor
   scope._session = session
 
@@ -29,15 +30,15 @@ App.factory 'ace', ($rootScope, storage, key) ->
       return true
 
   #no workers
-  editor.getSession().setUseWorker(false)
+  session.setUseWorker(false)
 
   #apply new settings
   scope.config = (c) ->
     editor.setTheme "ace/theme/#{c.theme}" if c.theme
+    editor.setShowPrintMargin c.printMargin if 'printMargin' of c
     session.setMode "ace/mode/#{c.mode}" if c.mode
     session.setTabSize c.tabSize if 'tabSize' of c
     session.setUseSoftTabs c.softTabs if 'softTabs' of c
-    editor.setShowPrintMargin c.printMargin if 'printMargin' of c
 
   scope.set = (val) ->
     session.setValue val

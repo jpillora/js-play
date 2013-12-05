@@ -3418,6 +3418,47 @@
         define(Mousetrap);
     }
 }) (window, document);
+
+
+/**
+ * adds a bindGlobal method to Mousetrap that allows you to
+ * bind specific keyboard shortcuts that will still work
+ * inside a text input field
+ *
+ * usage:
+ * Mousetrap.bindGlobal('ctrl+s', _saveChanges);
+ */
+/* global Mousetrap:true */
+Mousetrap = (function(Mousetrap) {
+    var _globalCallbacks = {},
+        _originalStopCallback = Mousetrap.stopCallback;
+
+    Mousetrap.stopCallback = function(e, element, combo, sequence) {
+        if (_globalCallbacks[combo] || _globalCallbacks[sequence]) {
+            return false;
+        }
+
+        return _originalStopCallback(e, element, combo);
+    };
+
+    var bind = Mousetrap.bind;
+
+    Mousetrap.bind = function(keys, callback, action) {
+        bind(keys, callback, action);
+
+        if (keys instanceof Array) {
+            for (var i = 0; i < keys.length; i++) {
+                _globalCallbacks[keys[i]] = true;
+            }
+            return;
+        }
+
+        _globalCallbacks[keys] = true;
+    };
+
+    return Mousetrap;
+}) (Mousetrap);
+
 /** Notify.js - v0.3.1 - 2013/07/05
  * http://notifyjs.com/
  * Copyright (c) 2013 Jaime Pillora - MIT
@@ -5559,7 +5600,7 @@ $.notify.addStyle("bootstrap", {
   App.controller('Spotlight', function($rootScope, $scope, key) {
     var scope;
     scope = $rootScope.spotlight = $scope;
-    scope.shown = true;
+    scope.shown = false;
     return key.bind('both+\\', function() {
       scope.shown = !scope.shown;
       return scope.$apply();
@@ -5573,6 +5614,7 @@ $.notify.addStyle("bootstrap", {
     Range = ace.require('ace/range').Range;
     editor = ace.edit("ace");
     session = editor.getSession();
+    scope._ace = ace;
     scope._editor = editor;
     scope._session = session;
     editor.setKeyboardHandler({
@@ -5601,10 +5643,13 @@ $.notify.addStyle("bootstrap", {
         return true;
       }
     });
-    editor.getSession().setUseWorker(false);
+    session.setUseWorker(false);
     scope.config = function(c) {
       if (c.theme) {
         editor.setTheme("ace/theme/" + c.theme);
+      }
+      if ('printMargin' in c) {
+        editor.setShowPrintMargin(c.printMargin);
       }
       if (c.mode) {
         session.setMode("ace/mode/" + c.mode);
@@ -5613,10 +5658,7 @@ $.notify.addStyle("bootstrap", {
         session.setTabSize(c.tabSize);
       }
       if ('softTabs' in c) {
-        session.setUseSoftTabs(c.softTabs);
-      }
-      if ('printMargin' in c) {
-        return editor.setShowPrintMargin(c.printMargin);
+        return session.setUseSoftTabs(c.softTabs);
       }
     };
     scope.set = function(val) {
@@ -5698,7 +5740,7 @@ $.notify.addStyle("bootstrap", {
       return true;
     };
     datums.add = function(d) {};
-    datums.filter = function(key, val) {};
+    datums.search = function(key, val) {};
     return datums;
   });
 
@@ -5889,16 +5931,16 @@ $.notify.addStyle("bootstrap", {
 
   App.factory('$exceptionHandler', function(console) {
     return function(exception, cause) {
-      console.error('exception caught\n', exception.stack || exception);
+      console.error('Exception caught\n', exception.stack || exception);
       if (cause) {
-        return console.error('exception cause', cause);
+        return console.error('Exception cause', cause);
       }
     };
   });
 
   App.run(function($rootScope, gh, console) {
     window.root = $rootScope;
-    console.log('playground init');
+    console.log('Init');
     return $("#loading-cover").fadeOut(1000, function() {
       return $(this).remove();
     });
