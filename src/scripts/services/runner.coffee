@@ -9,33 +9,20 @@ App.factory 'runner', ($rootScope) ->
       var context = (function() {
         this.console = {
           log: function() {
-            var str = Array.prototype.slice.call(arguments).map(function(arg) {
-              return typeof arg === "object" ? JSON.stringify(arg) : ""+arg;
-            }).join(" ");
-            postMessage({log:str});
+            var args = Array.prototype.slice.call(arguments);
+            postMessage({log:args});
           }
         };
       }());
       onmessage = function(event) {
         try {
-          eval.call(context, event.data);
+          var result = eval.call(context, event.data);
+          postMessage({result:result});
         } catch(err) {
           postMessage({err: err.stack || err.toString()});
         }
       };
     """
-
-    # zone.fork({
-    #   onZoneLeave: function () {
-    #     postMessage({result:true});
-    #   },
-    #   onError: function (err) {
-    #     postMessage({err: err.stack || err.toString()});
-    #   }
-    # }).run(function () {
-    #   eval.call(context, event.data);
-    # });
-
     blob = new Blob [workerCode], type: "text/javascript"
     url = URL.createObjectURL(blob)
     try
@@ -44,42 +31,66 @@ App.factory 'runner', ($rootScope) ->
       alert "Blob worker scripts not supported"
 
   worker =
+    n: 0
     curr: null
     scripts: [
       "http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.2.1/lodash.min.js"
-      # location.origin+"/js/zones.js"
     ]
     start: () ->
-      @stop() if @curr
-      console.log "start"
+      @stop("Script cancelled") if @curr
+      @n++
+      @t0 = +new Date()
+      # console.log "start", @n
       @curr = createWorker(@scripts)
-      @timeout = setTimeout (=> @stop()), 5000
+      @timeout = setTimeout (=> @stop("Script timeout")), 5000
     send: (o) ->
       @start() unless @curr
       @curr.postMessage o
     receieve: (fn) ->
       @start() unless @curr
       @curr.onmessage = fn
-    stop: ->
+    stop: (err) ->
       return unless @curr
-      console.log "stop"
+      now = +new Date()
+      t = now-@t0
+      if t < 1000
+        t = t+"ms"
+      else
+        t = Math.round(t/100)/10+"s"
+      # console.log "stop", @n, t
       @curr.terminate();
       @curr = null
+      if err
+        $.notify "#{err} (after #{t})", "error"
+      else
+        $.notify "Completed in #{t}", "success"
       clearTimeout @timeout
+
+  tostr = (args) ->
+    if(args instanceof Array)
+      return args.map((a) -> tostr a).join " "
+    else if typeof args is "string"
+      return args
+    else
+      return JSON.stringify args, null, 2
+
+  output = (args) ->
+    args = [args] unless args instanceof Array
+    # console.log.apply console, args
+    $rootScope.output += tostr(args) + "\n"
 
   run: (code, context) ->
     worker.start()
-
     worker.receieve (e) ->
       d = e.data
-      if typeof d isnt 'object'
+      if !d or typeof d isnt 'object'
         return
       if d.err
-        $.notify d.err
-        worker.stop()
+        worker.stop(d.err)
       else if d.log
-        $rootScope.output += d.log + "\n"
-      else if d.result
+        output d.log
+      else if 'result' of d
+        output d.result if d.result
         worker.stop()
       $rootScope.$apply()
       return
@@ -87,4 +98,3 @@ App.factory 'runner', ($rootScope) ->
     $rootScope.output = ""
     worker.send code
     return
-

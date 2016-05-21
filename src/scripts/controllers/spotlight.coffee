@@ -4,6 +4,6 @@ App.controller 'Spotlight', ($rootScope, $scope, key) ->
 
   scope.shown = false
 
-  key.bind 'both+\\', ->
+  key.bind '\\', ->
     scope.shown = not scope.shown
     scope.$apply()

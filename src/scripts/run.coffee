@@ -8,5 +8,4 @@ App.run ($rootScope, gh, console) ->
   console.log 'Init'
   $("#loading-cover").fadeOut 1000, -> $(@).remove()
 
-
 window.Plugins = angular.module 'plugins', ['playground']

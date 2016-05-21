@@ -5199,6 +5199,13 @@ $.notify.addStyle("bootstrap", {
     position: 'bottom left'
   });
 
+  firebase.initializeApp({
+    apiKey: "AIzaSyAXxUJr9p5lMcN8_XXsn-ugsKUTQvXKoRc",
+    authDomain: "js-play-cd3d8.firebaseapp.com",
+    databaseURL: "https://js-play-cd3d8.firebaseio.com",
+    storageBucket: ""
+  });
+
   Modes = [];
 
   CloudServices = [];
@@ -5208,8 +5215,13 @@ $.notify.addStyle("bootstrap", {
   App.controller('Controls', function($rootScope, $scope, $window, ace, gh, runner, storage, key) {
     var scope;
     scope = $rootScope.controls = $scope;
-    key.bind(['both+enter', 'shift+enter'], function() {
+    key.bind('Enter', function() {
+      console.log("run");
       return scope.run();
+    });
+    key.bind('C', function() {
+      console.log("toggle");
+      return scope.toggleMode();
     });
     scope.mode = storage.get('mode') || 'javascript';
     ace.config({
@@ -5221,7 +5233,7 @@ $.notify.addStyle("bootstrap", {
     gh.$on('authenticated', function() {
       return window.gh = gh;
     });
-    scope.coffee = function() {
+    scope.toggleMode = function() {
       if (scope.mode === 'javascript') {
         scope.mode = 'coffee';
       } else {
@@ -5277,48 +5289,23 @@ $.notify.addStyle("bootstrap", {
     var scope;
     scope = $rootScope.spotlight = $scope;
     scope.shown = false;
-    return key.bind('both+\\', function() {
+    return key.bind('\\', function() {
       scope.shown = !scope.shown;
       return scope.$apply();
     });
   });
 
-  App.factory('ace', function($rootScope, storage, key) {
+  App.factory('ace', function($rootScope, storage) {
     var Range, editor, scope, session;
     storage = storage.create('ace');
     scope = $rootScope.ace = $rootScope.$new(true);
     Range = ace.require('ace/range').Range;
     editor = ace.edit("ace");
+    editor.$blockScrolling = Infinity;
     session = editor.getSession();
     scope._ace = ace;
     scope._editor = editor;
     scope._session = session;
-    editor.setKeyboardHandler({
-      handleKeyboard: function(data, hashId, keyString, keyCode, e) {
-        var keys, str;
-        if (!e) {
-          return;
-        }
-        keys = [];
-        if (e.ctrlKey) {
-          keys.push('ctrl');
-        }
-        if (e.metaKey) {
-          keys.push('command');
-        }
-        if (e.shiftKey) {
-          keys.push('shift');
-        }
-        keys.push(keyString);
-        str = keys.join('+');
-        if (key.isBound(str)) {
-          key.trigger(str);
-          e.preventDefault();
-          return false;
-        }
-        return true;
-      }
-    });
     session.setUseWorker(false);
     scope.config = function(c) {
       if (c.theme) {
@@ -5334,8 +5321,9 @@ $.notify.addStyle("bootstrap", {
         session.setTabSize(c.tabSize);
       }
       if ('softTabs' in c) {
-        return session.setUseSoftTabs(c.softTabs);
+        session.setUseSoftTabs(c.softTabs);
       }
+      return console.log("config", c);
     };
     scope.set = function(val) {
       return session.setValue(val);
@@ -5384,6 +5372,42 @@ $.notify.addStyle("bootstrap", {
         return ga('send', 'event', 'Error', str(arguments));
       }
     };
+  });
+
+  App.factory('database', function() {
+    var auth, database, fdb;
+    fdb = firebase.database();
+    auth = function(fn) {
+      var req;
+      if (auth.user) {
+        fn(null, auth.user);
+      }
+      req = firebase.auth().signInAnonymously();
+      req.onAuthStateChanged(function(user) {
+        auth.user = user;
+        return fn(null, auth.user);
+      });
+      return req["catch"](function(error) {
+        console.warn("firebase auth error", error);
+        return fn(error);
+      });
+    };
+    database = {
+      set: function(k, v) {
+        auth(function() {
+          return fdb.ref(k).set(v);
+        });
+      },
+      on: function(k, fn) {
+        auth(function() {
+          return fdb.ref(k).on("value", function(snap) {
+            return fn(snap.val());
+          });
+        });
+      }
+    };
+    window.database = database;
+    return database;
   });
 
   App.factory('datums', function($rootScope) {
@@ -5488,37 +5512,30 @@ $.notify.addStyle("bootstrap", {
     return gh;
   });
 
-  App.factory('key', function() {
+  App.factory('key', function(ace) {
     var key;
-    key = Object.create(Mousetrap);
-    key.bind = function(keys, fn) {
-      var k, newkeys, _i, _len;
-      if (!(keys instanceof Array)) {
-        keys = [keys];
-      }
-      newkeys = [];
-      for (_i = 0, _len = keys.length; _i < _len; _i++) {
-        k = keys[_i];
-        if (/both/.test(k)) {
-          newkeys.push(k.replace("both", "ctrl"));
-          newkeys.push(k.replace("both", "command"));
-        } else {
-          newkeys.push(k);
-        }
-      }
-      return Mousetrap.bind(newkeys, fn);
+    key = {};
+    key.bind = function(key, fn) {
+      return ace._editor.commands.addCommand({
+        name: "custom-" + key,
+        bindKey: {
+          win: "Ctrl-" + key,
+          mac: "Command-" + key
+        },
+        exec: fn
+      });
     };
     return key;
   });
 
   App.factory('runner', function($rootScope) {
-    var createWorker, worker;
+    var createWorker, output, tostr, worker;
     createWorker = function(scripts) {
       var blob, scriptsStr, url, worker, workerCode;
       scriptsStr = scripts.map(function(s) {
         return "importScripts('" + s + "');";
       }).join("\n");
-      workerCode = "//js-play imports\n" + scriptsStr + "\n//js-play control code\nvar context = (function() {\n  this.console = {\n    log: function() {\n      var str = Array.prototype.slice.call(arguments).map(function(arg) {\n        return typeof arg === \"object\" ? JSON.stringify(arg) : \"\"+arg;\n      }).join(\" \");\n      postMessage({log:str});\n    }\n  };\n}());\nonmessage = function(event) {\n  try {\n    eval.call(context, event.data);\n  } catch(err) {\n    postMessage({err: err.stack || err.toString()});\n  }\n};";
+      workerCode = "//js-play imports\n" + scriptsStr + "\n//js-play control code\nvar context = (function() {\n  this.console = {\n    log: function() {\n      var args = Array.prototype.slice.call(arguments);\n      postMessage({log:args});\n    }\n  };\n}());\nonmessage = function(event) {\n  try {\n    var result = eval.call(context, event.data);\n    postMessage({result:result});\n  } catch(err) {\n    postMessage({err: err.stack || err.toString()});\n  }\n};";
       blob = new Blob([workerCode], {
         type: "text/javascript"
       });
@@ -5530,18 +5547,21 @@ $.notify.addStyle("bootstrap", {
       }
     };
     worker = {
+      n: 0,
       curr: null,
       scripts: ["http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.2.1/lodash.min.js"],
       start: function() {
-        var _this = this;
         if (this.curr) {
-          this.stop();
+          this.stop("Script cancelled");
         }
-        console.log("start");
+        this.n++;
+        this.t0 = +new Date();
         this.curr = createWorker(this.scripts);
-        return this.timeout = setTimeout((function() {
-          return _this.stop();
-        }), 5000);
+        return this.timeout = setTimeout(((function(_this) {
+          return function() {
+            return _this.stop("Script timeout");
+          };
+        })(this)), 5000);
       },
       send: function(o) {
         if (!this.curr) {
@@ -5555,15 +5575,44 @@ $.notify.addStyle("bootstrap", {
         }
         return this.curr.onmessage = fn;
       },
-      stop: function() {
+      stop: function(err) {
+        var now, t;
         if (!this.curr) {
           return;
         }
-        console.log("stop");
+        now = +new Date();
+        t = now - this.t0;
+        if (t < 1000) {
+          t = t + "ms";
+        } else {
+          t = Math.round(t / 100) / 10 + "s";
+        }
         this.curr.terminate();
         this.curr = null;
+        if (err) {
+          $.notify("" + err + " (after " + t + ")", "error");
+        } else {
+          $.notify("Completed in " + t, "success");
+        }
         return clearTimeout(this.timeout);
       }
+    };
+    tostr = function(args) {
+      if (args instanceof Array) {
+        return args.map(function(a) {
+          return tostr(a);
+        }).join(" ");
+      } else if (typeof args === "string") {
+        return args;
+      } else {
+        return JSON.stringify(args, null, 2);
+      }
+    };
+    output = function(args) {
+      if (!(args instanceof Array)) {
+        args = [args];
+      }
+      return $rootScope.output += tostr(args) + "\n";
     };
     return {
       run: function(code, context) {
@@ -5571,15 +5620,17 @@ $.notify.addStyle("bootstrap", {
         worker.receieve(function(e) {
           var d;
           d = e.data;
-          if (typeof d !== 'object') {
+          if (!d || typeof d !== 'object') {
             return;
           }
           if (d.err) {
-            $.notify(d.err);
-            worker.stop();
+            worker.stop(d.err);
           } else if (d.log) {
-            $rootScope.output += d.log + "\n";
-          } else if (d.result) {
+            output(d.log);
+          } else if ('result' in d) {
+            if (d.result) {
+              output(d.result);
+            }
             worker.stop();
           }
           $rootScope.$apply();

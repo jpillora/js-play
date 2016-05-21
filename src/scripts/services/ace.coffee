@@ -1,4 +1,4 @@
-App.factory 'ace', ($rootScope, storage, key) ->
+App.factory 'ace', ($rootScope, storage) ->
 
   #prefixed store
   storage = storage.create 'ace'
@@ -7,27 +7,27 @@ App.factory 'ace', ($rootScope, storage, key) ->
 
   Range = ace.require('ace/range').Range
   editor = ace.edit "ace"
+  editor.$blockScrolling = Infinity
   session = editor.getSession()
-
   scope._ace = ace
   scope._editor = editor
   scope._session = session
 
   #ace pass keyevents to angular
-  editor.setKeyboardHandler
-    handleKeyboard: (data, hashId, keyString, keyCode, e) ->
-      return unless e
-      keys = []
-      keys.push 'ctrl' if e.ctrlKey
-      keys.push 'command' if e.metaKey
-      keys.push 'shift' if e.shiftKey
-      keys.push keyString
-      str = keys.join '+'
-      if key.isBound str
-        key.trigger str
-        e.preventDefault()
-        return false
-      return true
+  # editor.setKeyboardHandler
+  #   handleKeyboard: (data, hashId, keyString, keyCode, e) ->
+  #     return unless e
+  #     keys = []
+  #     keys.push 'ctrl' if e.ctrlKey
+  #     keys.push 'command' if e.metaKey
+  #     keys.push 'shift' if e.shiftKey
+  #     keys.push keyString
+  #     str = keys.join '+'
+  #     if key.isBound str
+  #       key.trigger str
+  #       e.preventDefault()
+  #       return false
+  #     return true
 
   #no workers
   session.setUseWorker(false)
@@ -39,6 +39,7 @@ App.factory 'ace', ($rootScope, storage, key) ->
     session.setMode "ace/mode/#{c.mode}" if c.mode
     session.setTabSize c.tabSize if 'tabSize' of c
     session.setUseSoftTabs c.softTabs if 'softTabs' of c
+    console.log "config", c
 
   scope.set = (val) ->
     session.setValue val
@@ -66,4 +67,3 @@ App.factory 'ace', ($rootScope, storage, key) ->
     storage.set 'current-code', scope.get()
 
   scope
-
