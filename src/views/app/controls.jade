@@ -5,10 +5,12 @@
     .visible.content
       i.play.icon
 
-  //- .ui.vertical.animated.button
-  //-   .hidden.content Mode
-  //-   .visible.content
-  //-     i.code.icon
+  .ui.vertical.animated.button(style="padding-top:4px;padding-bottom:3px;", ng-click="toggleMode()")
+    .hidden.content Toggle
+    .visible.content
+        img(ng-if="mode == 'javascript'" src="img/js.png", width="24px")
+        img(ng-if="mode == 'coffee'" src="img/coffee.png", width="24px")
+      
 
   //- .ui.vertical.animated.button
   //-   .hidden.content Login

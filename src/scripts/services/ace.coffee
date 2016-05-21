@@ -39,7 +39,7 @@ App.factory 'ace', ($rootScope, storage) ->
     session.setMode "ace/mode/#{c.mode}" if c.mode
     session.setTabSize c.tabSize if 'tabSize' of c
     session.setUseSoftTabs c.softTabs if 'softTabs' of c
-    console.log "config", c
+    scope.currConfig = c
 
   scope.set = (val) ->
     session.setValue val

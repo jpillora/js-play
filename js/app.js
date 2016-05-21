@@ -5216,12 +5216,11 @@ $.notify.addStyle("bootstrap", {
     var scope;
     scope = $rootScope.controls = $scope;
     key.bind('Enter', function() {
-      console.log("run");
       return scope.run();
     });
     key.bind('C', function() {
-      console.log("toggle");
-      return scope.toggleMode();
+      scope.toggleMode();
+      return scope.$apply();
     });
     scope.mode = storage.get('mode') || 'javascript';
     ace.config({
@@ -5323,7 +5322,7 @@ $.notify.addStyle("bootstrap", {
       if ('softTabs' in c) {
         session.setUseSoftTabs(c.softTabs);
       }
-      return console.log("config", c);
+      return scope.currConfig = c;
     };
     scope.set = function(val) {
       return session.setValue(val);
@@ -5549,7 +5548,7 @@ $.notify.addStyle("bootstrap", {
     worker = {
       n: 0,
       curr: null,
-      scripts: ["http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.2.1/lodash.min.js"],
+      scripts: [],
       start: function() {
         if (this.curr) {
           this.stop("Script cancelled");

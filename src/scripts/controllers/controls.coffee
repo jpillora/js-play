@@ -5,11 +5,10 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
 
   #bind run shortcut
   key.bind 'Enter', ->
-    console.log "run"
     scope.run()
   key.bind 'C', ->
-    console.log "toggle"
     scope.toggleMode()
+    scope.$apply()
   #use prev mode
   scope.mode = storage.get('mode') or 'javascript'
   ace.config mode:scope.mode

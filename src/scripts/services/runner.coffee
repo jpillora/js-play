@@ -33,9 +33,7 @@ App.factory 'runner', ($rootScope) ->
   worker =
     n: 0
     curr: null
-    scripts: [
-      "http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.2.1/lodash.min.js"
-    ]
+    scripts: []
     start: () ->
       @stop("Script cancelled") if @curr
       @n++
