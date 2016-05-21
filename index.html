@@ -63,6 +63,10 @@
         <div class="hidden content">Run</div>
         <div class="visible content"><i class="play icon"></i></div>
       </div>
+      <div ng-click="share()" ng-if="!sharing" class="ui vertical animated button">
+        <div class="hidden content">Share</div>
+        <div class="visible content"><i class="share icon"></i></div>
+      </div>
       <div style="padding-top:4px;padding-bottom:3px;" ng-click="toggleMode()" class="ui vertical animated button">
         <div class="hidden content">Toggle</div>
         <div class="visible content"><img ng-if="mode == 'javascript'" src="img/js.png" width="24px"/><img ng-if="mode == 'coffee'" src="img/coffee.png" width="24px"/></div>

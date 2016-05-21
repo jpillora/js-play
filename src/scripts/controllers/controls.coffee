@@ -1,5 +1,5 @@
 
-App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storage, key) ->
+App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storage, key, database) ->
 
   scope = $rootScope.controls = $scope
 
@@ -51,3 +51,49 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
       return
     #now we run
     runner.run(code)
+
+  rand = ->
+    (Math.round(Math.random()*1e9)).toString(16)
+
+  scope.share = (id) ->
+    if scope.sharing
+      return
+    scope.sharing = true
+    generated = false
+    if !id
+      id = rand()
+      generated = true
+    #connect to firebase
+    database.init id, (error, dbcode) ->
+      if error
+        $.notify error, "error"
+        return
+      #ready
+      window.location.hash = id
+      if generated
+        $.notify "You can now share this page's URL", "success"
+      #watch for changes
+      recieve = (code) ->
+        return if !code or code is ace.get()
+        dbcode = code
+        ace.set code
+        $.notify "Received code update", "success"
+      send = (code) ->
+        database.set id, code
+        $.notify "Updated code share", "success"
+      #bind
+      database.on id, recieve
+      ace.onchange = (code) ->
+        return if !code or code is dbcode
+        clearTimeout send.t
+        send.t = setTimeout send.bind(null, code), 5000
+      #if not set, set initial value
+      if dbcode
+        recieve dbcode
+      else
+        send ace.get()
+      return
+  #shared already?
+  id = window.location.hash.slice(1)
+  if id
+    scope.share id

@@ -5,21 +5,13 @@
     .visible.content
       i.play.icon
 
+  .ui.vertical.animated.button(ng-click="share()", ng-if="!sharing")
+    .hidden.content Share
+    .visible.content
+      i.share.icon
+
   .ui.vertical.animated.button(style="padding-top:4px;padding-bottom:3px;", ng-click="toggleMode()")
     .hidden.content Toggle
     .visible.content
-        img(ng-if="mode == 'javascript'" src="img/js.png", width="24px")
-        img(ng-if="mode == 'coffee'" src="img/coffee.png", width="24px")
-      
-
-  //- .ui.vertical.animated.button
-  //-   .hidden.content Login
-  //-   .visible.content
-  //-     i.cloud.icon
-
-  //- .run.btn
-  //-   img(src="img/run-js.png")
-  //- .coffee.btn(ng-click="coffee()", ng-class="{active: mode=='coffee'}")
-  //-   img(src="img/coffee.png")
-  //- .gh.btn(ng-click="login()", ng-class="{active: gh.authed}")
-  //-   img(src="img/octocat.png")
+      img(ng-if="mode == 'javascript'" src="img/js.png", width="24px")
+      img(ng-if="mode == 'coffee'" src="img/coffee.png", width="24px")

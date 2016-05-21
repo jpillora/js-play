@@ -63,7 +63,9 @@ App.factory 'ace', ($rootScope, storage) ->
   #set default code
   scope.set storage.get('current-code') or "console.log('hello world!');"
 
+  scope.onchange = ->
   editor.on 'change', ->
-    storage.set 'current-code', scope.get()
-
+    code = scope.get()
+    storage.set 'current-code', code
+    scope.onchange code
   scope

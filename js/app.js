@@ -5199,21 +5199,14 @@ $.notify.addStyle("bootstrap", {
     position: 'bottom left'
   });
 
-  firebase.initializeApp({
-    apiKey: "AIzaSyAXxUJr9p5lMcN8_XXsn-ugsKUTQvXKoRc",
-    authDomain: "js-play-cd3d8.firebaseapp.com",
-    databaseURL: "https://js-play-cd3d8.firebaseio.com",
-    storageBucket: ""
-  });
-
   Modes = [];
 
   CloudServices = [];
 
   App = window.App = angular.module('playground', []);
 
-  App.controller('Controls', function($rootScope, $scope, $window, ace, gh, runner, storage, key) {
-    var scope;
+  App.controller('Controls', function($rootScope, $scope, $window, ace, gh, runner, storage, key, database) {
+    var id, rand, scope;
     scope = $rootScope.controls = $scope;
     key.bind('Enter', function() {
       return scope.run();
@@ -5243,7 +5236,7 @@ $.notify.addStyle("bootstrap", {
       });
       return storage.set('mode', scope.mode);
     };
-    return scope.run = function() {
+    scope.run = function() {
       var code, err, loc;
       code = ace.get();
       if (scope.mode === 'coffee') {
@@ -5278,6 +5271,61 @@ $.notify.addStyle("bootstrap", {
       }
       return runner.run(code);
     };
+    rand = function() {
+      return (Math.round(Math.random() * 1e9)).toString(16);
+    };
+    scope.share = function(id) {
+      var generated;
+      if (scope.sharing) {
+        return;
+      }
+      scope.sharing = true;
+      generated = false;
+      if (!id) {
+        id = rand();
+        generated = true;
+      }
+      return database.init(id, function(error, dbcode) {
+        var recieve, send;
+        if (error) {
+          $.notify(error, "error");
+          return;
+        }
+        window.location.hash = id;
+        if (generated) {
+          $.notify("You can now share this page's URL", "success");
+        }
+        recieve = function(code) {
+          if (!code || code === ace.get()) {
+            return;
+          }
+          dbcode = code;
+          ace.set(code);
+          return $.notify("Received code update", "success");
+        };
+        send = function(code) {
+          database.set(id, code);
+          return $.notify("Updated code share", "success");
+        };
+        database.on(id, recieve);
+        ace.onchange = function(code) {
+          if (!code || code === dbcode) {
+            return;
+          }
+          clearTimeout(send.t);
+          return send.t = setTimeout(send.bind(null, code), 5000);
+        };
+        if (dbcode) {
+          recieve(dbcode);
+        } else {
+          send(ace.get());
+        }
+      });
+    };
+    id = window.location.hash.slice(1);
+    if (id) {
+      return scope.share(id);
+    }
   });
 
   App.controller('Output', function($rootScope) {
@@ -5348,8 +5396,12 @@ $.notify.addStyle("bootstrap", {
       printMargin: false
     });
     scope.set(storage.get('current-code') || "console.log('hello world!');");
+    scope.onchange = function() {};
     editor.on('change', function() {
-      return storage.set('current-code', scope.get());
+      var code;
+      code = scope.get();
+      storage.set('current-code', code);
+      return scope.onchange(code);
     });
     return scope;
   });
@@ -5374,38 +5426,88 @@ $.notify.addStyle("bootstrap", {
   });
 
   App.factory('database', function() {
-    var auth, database, fdb;
-    fdb = firebase.database();
-    auth = function(fn) {
-      var req;
-      if (auth.user) {
-        fn(null, auth.user);
+    var auth, database, db, prepare, user;
+    db = null;
+    user = null;
+    prepare = function(fn) {
+      var int, success;
+      if (db) {
+        return fn();
       }
-      req = firebase.auth().signInAnonymously();
-      req.onAuthStateChanged(function(user) {
-        auth.user = user;
-        return fn(null, auth.user);
+      firebase.initializeApp({
+        apiKey: "AIzaSyAXxUJr9p5lMcN8_XXsn-ugsKUTQvXKoRc",
+        authDomain: "js-play-cd3d8.firebaseapp.com",
+        databaseURL: "https://js-play-cd3d8.firebaseio.com",
+        storageBucket: ""
       });
-      return req["catch"](function(error) {
-        console.warn("firebase auth error", error);
+      db = window.database = firebase.database();
+      success = null;
+      int = setInterval(function() {
+        var u;
+        u = firebase.auth().currentUser;
+        if (u && success === null) {
+          success = true;
+          user = u;
+          fn();
+          return clearInterval(int);
+        }
+      }, 100);
+      return setTimeout(function() {
+        if (success === null) {
+          success = false;
+          return fn();
+        }
+      }, 3000);
+    };
+    auth = function(fn) {
+      if (user) {
+        return fn();
+      }
+      console.log("no current user, creating account");
+      firebase.auth().signInAnonymously()["catch"](function(error) {
         return fn(error);
       });
+      firebase.auth().onAuthStateChanged(function(u) {
+        user = u;
+        console.log("got user", u);
+        return fn();
+      });
+      return null;
     };
     database = {
+      init: function(k, fn) {
+        return prepare(function(error) {
+          if (error) {
+            return fn(error);
+          }
+          return auth(function(error) {
+            console.log("authed", error);
+            if (error) {
+              return fn(error);
+            }
+            return database.get(k, function(val) {
+              return fn(null, val);
+            });
+          });
+        });
+      },
       set: function(k, v) {
-        auth(function() {
-          return fdb.ref(k).set(v);
+        return db.ref(k).set(v);
+      },
+      get: function(k, fn) {
+        return db.ref(k).once("value", function(snap) {
+          return fn(snap.val());
         });
       },
       on: function(k, fn) {
-        auth(function() {
-          return fdb.ref(k).on("value", function(snap) {
-            return fn(snap.val());
-          });
+        return db.ref(k).on("value", function(snap) {
+          return fn(snap.val());
         });
+      },
+      off: function() {
+        return db.ref(k).off("value");
       }
     };
-    window.database = database;
     return database;
   });
 
