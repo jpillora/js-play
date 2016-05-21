@@ -57,12 +57,17 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
 
   scope.share = (id) ->
     if scope.sharing
+      database.off scope.share.id
+      ace.onchange = ->
+      scope.sharing = false
+      window.location.hash = ""
       return
     scope.sharing = true
     generated = false
     if !id
       id = rand()
       generated = true
+    scope.share.id = id
     #connect to firebase
     database.init id, (error, dbcode) ->
       if error

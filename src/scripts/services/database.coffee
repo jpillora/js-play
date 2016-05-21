@@ -30,12 +30,10 @@ App.factory 'database', () ->
     if user
       return fn()
     #create account and fetch user
-    console.log "no current user, creating account"
     firebase.auth().signInAnonymously().catch (error) ->
       fn(error)
     firebase.auth().onAuthStateChanged (u) ->
       user = u
-      console.log "got user", u
       fn()
     return null
   #api
@@ -45,7 +43,6 @@ App.factory 'database', () ->
         if error
           return fn(error)
         auth (error) ->
-          console.log "authed", error
           if error
             return fn(error)
           database.get k, (val) ->
@@ -56,6 +53,6 @@ App.factory 'database', () ->
       db.ref(k).once "value", (snap) -> fn(snap.val())
     on: (k, fn) ->
       db.ref(k).on "value", (snap) -> fn(snap.val())
-    off: ->
+    off: (k) ->
       db.ref(k).off "value"
   return database

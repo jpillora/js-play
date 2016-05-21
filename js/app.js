@@ -5277,6 +5277,10 @@ $.notify.addStyle("bootstrap", {
     scope.share = function(id) {
       var generated;
       if (scope.sharing) {
+        database.off(scope.share.id);
+        ace.onchange = function() {};
+        scope.sharing = false;
+        window.location.hash = "";
         return;
       }
       scope.sharing = true;
@@ -5285,6 +5289,7 @@ $.notify.addStyle("bootstrap", {
         id = rand();
         generated = true;
       }
+      scope.share.id = id;
       return database.init(id, function(error, dbcode) {
         var recieve, send;
         if (error) {
@@ -5463,13 +5468,11 @@ $.notify.addStyle("bootstrap", {
       if (user) {
         return fn();
       }
-      console.log("no current user, creating account");
       firebase.auth().signInAnonymously()["catch"](function(error) {
         return fn(error);
       });
       firebase.auth().onAuthStateChanged(function(u) {
         user = u;
-        console.log("got user", u);
         return fn();
       });
       return null;
@@ -5481,7 +5484,6 @@ $.notify.addStyle("bootstrap", {
             return fn(error);
           }
           return auth(function(error) {
-            console.log("authed", error);
             if (error) {
               return fn(error);
             }
@@ -5504,7 +5506,7 @@ $.notify.addStyle("bootstrap", {
           return fn(snap.val());
         });
       },
-      off: function() {
+      off: function(k) {
         return db.ref(k).off("value");
       }
     };

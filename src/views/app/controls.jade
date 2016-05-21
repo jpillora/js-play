@@ -5,8 +5,8 @@
     .visible.content
       i.play.icon
 
-  .ui.vertical.animated.button(ng-click="share()", ng-if="!sharing")
-    .hidden.content Share
+  .ui.vertical.animated.button(ng-click="share()")
+    .hidden.content {{ sharing ? 'Cancel' : 'Share' }}
     .visible.content
       i.share.icon
 
