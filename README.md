@@ -6,16 +6,14 @@ https://js.jpillora.com
 
 ### Features
 
+* Simple – No HTML and CSS
+* Inline syntax errors
 * Uses web workers
     * Secure – code can't escape the worker sandbox
     * Timeouts – scripts have a 30 second timeout to solve the halting problem
 * CoffeeScript mode (Yes I know, this is a very old project)
 * Share scripts using Firebase
 * External scripts with `importScripts("https://<url>")`
-
-### Notes
-
-* Since code runs in a web worker, global scope is [DedicatedWorkerGlobalScope](https://developer.mozilla.org/en-US/docs/Web/API/DedicatedWorkerGlobalScope), not `window`.
 
 ### Todo
 
@@ -24,6 +22,11 @@ https://js.jpillora.com
 * Login to Github and create/update gists
 * Share should use an operational transform
 * Get a more memorable domain name (Email me your domain transfer code and I'll swap it out :smile:)
+
+### Notes
+
+* Requires browser support for `Worker` and `Blob`.
+* Global scope is [DedicatedWorkerGlobalScope](https://developer.mozilla.org/en-US/docs/Web/API/DedicatedWorkerGlobalScope), not `window`.
 
 #### MIT License
 
