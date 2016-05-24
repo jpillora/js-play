@@ -3071,7 +3071,8 @@ $.notify.addStyle("bootstrap", {
     var id, rand, scope;
     scope = $rootScope.controls = $scope;
     key.bind('Super-Enter', function() {
-      return scope.run();
+      scope.run();
+      return $rootScope.$apply();
     });
     key.bind('Super-S', function() {
       return $.notify("Save not supported yet", "warn");
@@ -3526,11 +3527,12 @@ $.notify.addStyle("bootstrap", {
         this.n++;
         this.t0 = +new Date();
         this.curr = createWorker(this.scripts);
-        return this.timeout = setTimeout(((function(_this) {
+        this.timeout = setTimeout(((function(_this) {
           return function() {
             return _this.stop("Script timeout");
           };
         })(this)), 30 * 1000);
+        return $rootScope.running = true;
       },
       send: function(o) {
         if (!this.curr) {
@@ -3563,7 +3565,9 @@ $.notify.addStyle("bootstrap", {
         } else {
           $.notify("Ran in " + t, "success");
         }
-        return clearTimeout(this.timeout);
+        clearTimeout(this.timeout);
+        $rootScope.running = false;
+        return $rootScope.$apply();
       }
     };
     tostr = function(args) {
@@ -3661,7 +3665,6 @@ $.notify.addStyle("bootstrap", {
 
   App.run(function($rootScope, gh, console) {
     window.root = $rootScope;
-    console.log('Init');
     $("#loading-cover").fadeOut(1000, function() {
       return $(this).remove();
     });

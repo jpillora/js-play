@@ -83,9 +83,9 @@ App.factory 'runner', ($rootScope) ->
       @stop("Script cancelled") if @curr
       @n++
       @t0 = +new Date()
-      # console.log "start", @n
       @curr = createWorker(@scripts)
       @timeout = setTimeout (=> @stop("Script timeout")), 30*1000
+      $rootScope.running = true
     send: (o) ->
       @start() unless @curr
       @curr.postMessage o
@@ -100,7 +100,6 @@ App.factory 'runner', ($rootScope) ->
         t = t+"ms"
       else
         t = Math.round(t/100)/10+"s"
-      # console.log "stop", @n, t
       @curr.terminate();
       @curr = null
       if err
@@ -108,6 +107,8 @@ App.factory 'runner', ($rootScope) ->
       else
         $.notify "Ran in #{t}", "success"
       clearTimeout @timeout
+      $rootScope.running = false
+      $rootScope.$apply()
 
   tostr = (args) ->
     if(args instanceof Array)

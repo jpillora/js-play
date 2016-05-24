@@ -59,9 +59,9 @@
       <pre ng-bind="output"></pre>
     </div>
     <div id="controls" ng-controller="Controls">
-      <div ng-click="run()" class="ui vertical animated button">
+      <div ng-click="run()" ng-class="{green: running}" class="ui vertical animated button">
         <div class="hidden content">Run</div>
-        <div class="visible content"><i class="play icon"></i></div>
+        <div class="visible content"><i ng-class="{play: !running, swirl: running, loading: running}" class="icon"></i></div>
       </div>
       <div ng-click="share()" ng-class="{green:sharing}" class="ui vertical animated button">
         <div class="hidden content">{{ sharing ? 'Cancel' : 'Share' }}</div>

@@ -1,9 +1,9 @@
 #controls(ng-controller="Controls")
 
-  .ui.vertical.animated.button(ng-click="run()")
+  .ui.vertical.animated.button(ng-click="run()", ng-class="{green: running}")
     .hidden.content Run
     .visible.content
-      i.play.icon
+      i.icon(ng-class="{play: !running, swirl: running, loading: running}")
   .ui.vertical.animated.button(ng-click="share()", ng-class="{green:sharing}")
     .hidden.content {{ sharing ? 'Cancel' : 'Share' }}
     .visible.content

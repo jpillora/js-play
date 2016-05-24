@@ -4,6 +4,7 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
   #bind run shortcut
   key.bind 'Super-Enter', ->
     scope.run()
+    $rootScope.$apply()
   key.bind 'Super-S', ->
     $.notify "Save not supported yet", "warn"
   key.bind 'Ctrl-D', ->

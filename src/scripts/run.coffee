@@ -5,7 +5,6 @@ App.factory '$exceptionHandler', (console) -> (exception, cause) ->
 
 App.run ($rootScope, gh, console) ->
   window.root = $rootScope
-  console.log 'Init'
   $("#loading-cover").fadeOut 1000, -> $(@).remove()
   setTimeout ->
     superkey = if /Macintosh/.test window.navigator.userAgent then "Cmd" else "Ctrl"
