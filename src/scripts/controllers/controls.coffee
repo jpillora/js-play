@@ -1,14 +1,14 @@
 
 App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storage, key, database) ->
-
   scope = $rootScope.controls = $scope
-
   #bind run shortcut
-  key.bind 'Enter', ->
+  key.bind 'Super-Enter', ->
     scope.run()
-  key.bind 'C', ->
-    scope.toggleMode()
-    scope.$apply()
+  key.bind 'Super-S', ->
+    $.notify "Save not supported yet", "warn"
+  key.bind 'Ctrl-D', ->
+    ace._editor.execCommand("duplicateSelection")
+
   #use prev mode
   scope.mode = storage.get('mode') or 'javascript'
   ace.config mode:scope.mode

@@ -1,9 +1,10 @@
 
 App.factory 'key', (ace) ->
-  key = {}
-  key.bind = (key, fn) ->
+  #public api
+  bind: (key, fn) ->
+    mac = key.replace /^Super-/, "Command-"
+    win = key.replace /^Super-/, "Ctrl-"
     ace._editor.commands.addCommand
-      name: "custom-"+key,
-      bindKey: {win: "Ctrl-"+key, mac: "Command-"+key},
+      name: "Custom-"+key,
+      bindKey: {win, mac},
       exec: fn
-  key

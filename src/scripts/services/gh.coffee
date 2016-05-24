@@ -1,20 +1,14 @@
-
+#github logins, fetch gists, see 'datums' for usecase
 App.factory 'gh', ($http, $rootScope, $timeout, storage, console, datums) ->
-
-
   #prefixed store
   storage = storage.create 'gh'
-
   gh = $rootScope.gh = $rootScope.$new true
-
   gh.authed = false
-
   #indexable gh datum
   datums.type 'gist', {
     save: ->
     remove: ->
   }
-
   #public methods
   gh.login = ->
     win = window.open 'https://github.com/login/oauth/authorize?'+
@@ -67,13 +61,9 @@ App.factory 'gh', ($http, $rootScope, $timeout, storage, console, datums) ->
     gh.github.getUser().gists (err, gists) ->
       return console.error err if err
       gh.gists = gists
-      
 
   #reload last session
   $timeout ->
     init storage.get "auth"
 
   gh
-
-
-
