@@ -11,16 +11,17 @@ https://js.jpillora.com
 * Uses web workers
     * Secure – code can't escape the worker sandbox
     * Timeouts – scripts have a 30 second timeout to solve the halting problem
-* CoffeeScript mode (Yes I know, this is a very old project)
-* Share scripts using Firebase
+* Share semi-realtime updatable scripts
 * External scripts with `importScripts("https://<url>")`
+* Add a `debugger` statement to pause execution in Dev Tools
+* CoffeeScript mode (Yes I know, this is a very old project)
 
 ### Todo
 
 * Convert source to plain JavaScript, HTML, CSS
 * Pre-defined list of custom scripts
 * Login to Github and create/update gists
-* Share should use an operational transform
+* Share could be more realtime using operational transforms
 * Get a more memorable domain name (Email me your domain transfer code and I'll swap it out :smile:)
 
 ### Notes
