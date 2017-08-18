@@ -3080,9 +3080,38 @@ $.notify.addStyle("bootstrap", {
     key.bind('Ctrl-D', function() {
       return ace._editor.execCommand("duplicateSelection");
     });
+    scope.modes = ['javascript', 'coffee', 'babel'];
+    scope.nextMode = function() {
+      var i, next;
+      i = scope.modes.indexOf(scope.mode);
+      if (i === -1) {
+        i = 0;
+      }
+      next = scope.modes[(i + 1) % scope.modes.length];
+      return next;
+    };
+    scope.modeLabel = function() {
+      switch (scope.mode) {
+        case 'javascript':
+          return "JS";
+        case 'coffee':
+          return "CS";
+        case 'babel':
+          return "ES6";
+        default:
+          return "??";
+      }
+    };
+    scope.aceMode = function() {
+      if (scope.mode === 'coffee') {
+        return 'coffee';
+      } else {
+        return 'javascript';
+      }
+    };
     scope.mode = storage.get('mode') || 'javascript';
     ace.config({
-      mode: scope.mode
+      mode: scope.aceMode()
     });
     scope.login = function() {
       gh.login();
@@ -3091,18 +3120,17 @@ $.notify.addStyle("bootstrap", {
       return window.gh = gh;
     });
     scope.toggleMode = function() {
-      if (scope.mode === 'javascript') {
-        scope.mode = 'coffee';
-      } else {
-        scope.mode = 'javascript';
-      }
+      var mode;
+      mode = scope.nextMode();
+      scope.mode = mode;
       ace.config({
-        mode: scope.mode
+        mode: scope.aceMode()
       });
-      return storage.set('mode', scope.mode);
+      storage.set('mode', mode);
+      return console.log("mode is: " + mode);
     };
     scope.run = function() {
-      var code, err, loc;
+      var code, err, loc, msg, result;
       code = ace.get();
       if (scope.mode === 'coffee') {
         try {
@@ -3117,6 +3145,25 @@ $.notify.addStyle("bootstrap", {
             });
           }
           $.notify(err.toString());
+          return;
+        }
+      } else if (scope.mode === 'babel') {
+        try {
+          result = Babel.transform(code, {
+            presets: ['es2015']
+          });
+          code = result.code;
+        } catch (_error) {
+          err = _error;
+          msg = err.message.split("\n")[0];
+          loc = err.loc;
+          if (loc) {
+            ace.highlight({
+              row: loc.line - 1,
+              col: loc.column
+            });
+          }
+          $.notify(msg);
           return;
         }
       }
@@ -3664,7 +3711,24 @@ $.notify.addStyle("bootstrap", {
   });
 
   App.run(function($rootScope, gh, console) {
+    var isSplitV;
     window.root = $rootScope;
+    isSplitV = function() {
+      var w;
+      w = window.innerWidth;
+      if (w < 600) {
+        return false;
+      }
+      if (w < window.innerHeight) {
+        return false;
+      }
+      return true;
+    };
+    $rootScope.splitV = isSplitV();
+    $(window).on("resize", function() {
+      $rootScope.splitV = isSplitV();
+      return $rootScope.$applyAsync();
+    });
     $("#loading-cover").fadeOut(1000, function() {
       return $(this).remove();
     });

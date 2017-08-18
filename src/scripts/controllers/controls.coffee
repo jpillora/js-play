@@ -9,10 +9,27 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
     $.notify "Save not supported yet", "warn"
   key.bind 'Ctrl-D', ->
     ace._editor.execCommand("duplicateSelection")
-
+  # mode set
+  scope.modes = ['javascript', 'coffee', 'babel']
+  scope.nextMode = ->
+    i = scope.modes.indexOf scope.mode
+    if i is -1
+      i = 0
+    next = scope.modes[(i+1)%scope.modes.length]
+    return next
+  # mode label
+  scope.modeLabel = ->
+    return switch scope.mode
+      when 'javascript' then "JS"
+      when 'coffee' then "CS"
+      when 'babel' then "ES6"
+      else "??"
+  # calc ace mode
+  scope.aceMode = ->
+    return if scope.mode is 'coffee' then 'coffee' else 'javascript'
   #use prev mode
   scope.mode = storage.get('mode') or 'javascript'
-  ace.config mode:scope.mode
+  ace.config mode: scope.aceMode()
   #click handler
   scope.login = ->
     gh.login()
@@ -22,12 +39,11 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
     window.gh = gh
 
   scope.toggleMode = ->
-    if scope.mode is 'javascript'
-      scope.mode = 'coffee'
-    else
-      scope.mode = 'javascript'
-    ace.config mode:scope.mode
-    storage.set('mode', scope.mode)
+    mode = scope.nextMode()
+    scope.mode = mode
+    ace.config mode: scope.aceMode()
+    storage.set('mode', mode)
+    console.log "mode is: #{mode}"
 
   scope.run = ->
     code = ace.get()
@@ -40,6 +56,17 @@ App.controller 'Controls', ($rootScope, $scope, $window, ace, gh, runner, storag
         if loc
           ace.highlight {row: loc.first_line, col:loc.first_column}
         $.notify err.toString()
+        return
+    else if scope.mode is 'babel'
+      try
+        result = Babel.transform(code, { presets: ['es2015'] })
+        code = result.code
+      catch err
+        msg = err.message.split("\n")[0]
+        loc = err.loc
+        if loc
+          ace.highlight {row: loc.line-1, col:loc.column}
+        $.notify msg
         return
     #confirm js syntax
     try

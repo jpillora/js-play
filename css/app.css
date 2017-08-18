@@ -17586,15 +17586,12 @@ body {
 
 /* line 1 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
 #out {
-  left: 50%;
-  width: 50%;
   z-index: 1;
-  border-left: #2f3129 thin solid;
   padding-left: 5px;
   overflow-y: auto;
 }
 
-/* line 8 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
+/* line 5 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
 #out pre {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
   word-wrap: break-word;
@@ -17604,7 +17601,21 @@ body {
   margin: 0;
 }
 
-/* line 15 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
+/* line 13 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
+.vertical #out {
+  left: 50%;
+  width: 50%;
+  border-left: #2f3129 thin solid;
+}
+
+/* line 18 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
+.horizontal #out {
+  top: 50%;
+  height: 50%;
+  border-top: #2f3129 thin solid;
+}
+
+/* line 22 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/out.styl */
 
 /* line 2 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
 
@@ -17612,16 +17623,25 @@ body {
 #ace {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
   font-size: 1.25em;
-  width: 50%;
   z-index: 1;
 }
 
-/* line 9 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
+/* line 7 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
+.vertical #ace {
+  width: 50%;
+}
+
+/* line 10 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
+.horizontal #ace {
+  height: 50%;
+}
+
+/* line 14 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
 .ace_scrollbar {
   display: none !important;
 }
 
-/* line 12 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
+/* line 17 : /Users/jpillora/Code/JavaScript/js-play/src/styles/app/ace.styl */
 .ace_warning {
   background: rgba(255,50,50,0.1);
   position: absolute;

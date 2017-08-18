@@ -5,6 +5,20 @@ App.factory '$exceptionHandler', (console) -> (exception, cause) ->
 
 App.run ($rootScope, gh, console) ->
   window.root = $rootScope
+
+  isSplitV = ->
+    w = window.innerWidth
+    if w < 600
+      return false
+    if w < window.innerHeight
+      return false
+    return true
+
+  $rootScope.splitV = isSplitV()
+  $(window).on "resize", ->
+    $rootScope.splitV = isSplitV()
+    $rootScope.$applyAsync()
+
   $("#loading-cover").fadeOut 1000, -> $(@).remove()
   setTimeout ->
     superkey = if /Macintosh/.test window.navigator.userAgent then "Cmd" else "Ctrl"
